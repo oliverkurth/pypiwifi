@@ -2,6 +2,8 @@
 
 from flask import Flask, render_template
 import netifaces
+import iwlib
+import sys
 
 app = Flask(__name__)
 
@@ -15,7 +17,14 @@ def show_iface(name):
 
 	gateway = gws['default'][netifaces.AF_INET][0]
 
-	return render_template('interface.html', name=name, address=address, gateway=gateway)
+	try:
+		iwconfig = iwlib.get_iwconfig(name)
+		essid = iwconfig['ESSID']
+	except IOError:
+		essid = ''
+		pass
+
+	return render_template('interface.html', name=name, address=address, gateway=gateway, essid=essid)
 
 @app.route('/')
 def show_iface_main():
