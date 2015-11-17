@@ -6,12 +6,17 @@
 <title>{{name}}</title>
 
 {% for ni in ifaces %}
-<p>Name: {{ni}}</p>
-<p>Address: {{addrs[ni]}}</p>
+<table style="width:100%">
+<tr><td>Name:</td><td>{{ni}}</td></tr>
+<tr><td>Address:</td><td>{{addrs[ni]}}</td></tr>
 {% if essids[ni] %}
-<p>ESSID: {{essids[ni]}}</p>
+<tr><td>ESSID:</td><td>{{essids[ni]}}</td></tr>
 {% endif %}
+</table>
 {% endfor %}
-<p>Gateway: {{gateway}}</p>
-<p>Public IP: {{publicip}}</p>
+
+<table style="width:100%">
+<tr><td>Gateway:</td><td>{{gateway}}</td></tr>
+<tr><td>Public IP:</td><td>{{publicip}}</td></tr>
+</table>
 
