@@ -14,6 +14,16 @@ def get_public_ip():
 
 	return content
 
+def get_dns():
+	dnslist = []
+	lines = open("/etc/resolv.conf").read().split('\n')
+	for l in lines:
+		items = l.split()
+		if len(items) > 0:
+			if items[0] == 'nameserver':
+				dnslist.append(items[1])
+	return dnslist
+
 @app.route('/')
 def show_netconfig():
 
@@ -37,9 +47,11 @@ def show_netconfig():
 
 	publicip = get_public_ip()
 
+	dnslist = get_dns()
+
 	return render_template('netconfig.html',
 		ifaces=ifaces, addrs=addrs, gateway=gateway, publicip=publicip,
-		essids=essids)
+		essids=essids, dns=dnslist[0])
 
 if __name__ == '__main__':
 	app.debug = True
