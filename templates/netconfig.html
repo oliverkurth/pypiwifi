@@ -5,11 +5,13 @@
 
 <title>{{name}}</title>
 
-<p>Name: {{name}}</p>
-<p>Address: {{address}}</p>
+{% for ni in ifaces %}
+<p>Name: {{ni}}</p>
+<p>Address: {{addrs[ni]}}</p>
+{% if essids[ni] %}
+<p>ESSID: {{essids[ni]}}</p>
+{% endif %}
+{% endfor %}
 <p>Gateway: {{gateway}}</p>
 <p>Public IP: {{publicip}}</p>
-{% if essid %}
-<p>ESSID: {{essid}}</p>
-{% endif %}
 

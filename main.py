@@ -4,32 +4,44 @@ from flask import Flask, render_template
 import netifaces
 import iwlib
 import sys
+import httplib2
 
 app = Flask(__name__)
 
-@app.route('/iface/<name>')
-def show_iface(name):
-	addrs = netifaces.ifaddresses(name)
+def get_public_ip():
+	client = httplib2.Http()
+	response, content = client.request('http://whatismyip.akamai.com')
 
-	address = addrs[netifaces.AF_INET][0]['addr']
+	return content
+
+@app.route('/')
+def show_netconfig():
+
+	ifaces = netifaces.interfaces()
+	addrs = {}
+	for ni in ifaces:
+		addrs[ni] = netifaces.ifaddresses(ni)[netifaces.AF_INET][0]['addr']
 
 	gws = netifaces.gateways()
 
 	gateway = gws['default'][netifaces.AF_INET][0]
 
-	try:
-		iwconfig = iwlib.get_iwconfig(name)
-		essid = iwconfig['ESSID']
-	except IOError:
-		essid = ''
-		pass
+	essids = {}
+	for ni in ifaces:
+		try:
+			iwconfig = iwlib.get_iwconfig(ni)
+			essids[ni] = iwconfig['ESSID']
+		except IOError:
+			essids[ni] = ''
+			pass
 
-	return render_template('interface.html', name=name, address=address, gateway=gateway, essid=essid)
+	publicip = get_public_ip()
 
-@app.route('/')
-def show_iface_main():
-	return show_iface('eth0')
+	return render_template('netconfig.html',
+		ifaces=ifaces, addrs=addrs, gateway=gateway, publicip=publicip,
+		essids=essids)
 
 if __name__ == '__main__':
+	app.debug = True
 	app.run(host='0.0.0.0')
 
