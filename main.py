@@ -6,6 +6,8 @@ import iwlib
 import sys
 import httplib2
 
+import ping
+
 app = Flask(__name__)
 
 def get_public_ip():
@@ -24,9 +26,17 @@ def get_dns():
 				dnslist.append(items[1])
 	return dnslist
 
+def get_pings():
+	ret = ping.ping_counted('8.8.8.8')
+	return ret
+
 @app.route('/api/public_ip')
 def api_public_ip():
 	return '{"public_ip": "' + get_public_ip() + '"}'
+
+@app.route('/api/pings')
+def api_pings():
+	return '{"pings": "' + str(get_pings()) + '"}'
 
 @app.route('/')
 def show_netconfig():

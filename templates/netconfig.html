@@ -1,21 +1,31 @@
 <!doctype html>
 
 <script>
-var xmlhttp = new XMLHttpRequest();
-var url = "api/public_ip";
 
-xmlhttp.onreadystatechange = function() {
-    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-        var result = JSON.parse(xmlhttp.responseText);
-        myFunction(result);
-    }
-};
-xmlhttp.open("GET", url, true);
-xmlhttp.send();
+function async_request(url, callback) {
+    var xmlhttp = new XMLHttpRequest();
 
-function myFunction(result) {
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var result = JSON.parse(xmlhttp.responseText);
+            callback(result);
+        }
+    };
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+}
+
+function display_public_ip(result) {
     document.getElementById("public_ip").innerHTML = result.public_ip
 }
+
+function display_pings(result) {
+    document.getElementById("pings").innerHTML = result.pings
+}
+
+async_request("api/public_ip", display_public_ip);
+async_request("api/pings", display_pings);
+
 </script>
 
 <!--Mobile specific meta goodness :)-->
@@ -37,5 +47,6 @@ function myFunction(result) {
 <tr><td>Gateway:</td><td>{{gateway}}</td></tr>
 <tr><td>DNS:</td><td>{{dns}}</td></tr>
 <tr><td>Public IP:</td><td><div id="public_ip"></div></td></tr>
+<tr><td>Pings:</td><td><div id="pings"></div></td></tr>
 </table>
 
