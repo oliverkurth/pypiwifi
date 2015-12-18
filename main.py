@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import netifaces
 import iwlib
 import sys
@@ -26,17 +26,18 @@ def get_dns():
 				dnslist.append(items[1])
 	return dnslist
 
-def get_pings():
-	ret = ping.ping_counted('8.8.8.8')
+def get_pings(host='8.8.8.8'):
+	ret = ping.ping_counted(host)
 	return ret
 
 @app.route('/api/public_ip')
 def api_public_ip():
 	return '{"public_ip": "' + get_public_ip() + '"}'
 
-@app.route('/api/pings')
+@app.route('/api/pings', methods=['GET'])
 def api_pings():
-	return '{"pings": "' + str(get_pings()) + '"}'
+	host = request.args.get('host')
+	return '{"pings": "' + str(get_pings(host)) + '"}'
 
 @app.route('/')
 def show_netconfig():
