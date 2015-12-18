@@ -24,6 +24,10 @@ def get_dns():
 				dnslist.append(items[1])
 	return dnslist
 
+@app.route('/api/public_ip')
+def api_public_ip():
+	return '{"public_ip": "' + get_public_ip() + '"}'
+
 @app.route('/')
 def show_netconfig():
 
@@ -45,12 +49,10 @@ def show_netconfig():
 			essids[ni] = ''
 			pass
 
-	publicip = get_public_ip()
-
 	dnslist = get_dns()
 
 	return render_template('netconfig.html',
-		ifaces=ifaces, addrs=addrs, gateway=gateway, publicip=publicip,
+		ifaces=ifaces, addrs=addrs, gateway=gateway,
 		essids=essids, dns=dnslist[0])
 
 if __name__ == '__main__':

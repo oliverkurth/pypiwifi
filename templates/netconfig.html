@@ -1,5 +1,23 @@
 <!doctype html>
 
+<script>
+var xmlhttp = new XMLHttpRequest();
+var url = "api/public_ip";
+
+xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        var result = JSON.parse(xmlhttp.responseText);
+        myFunction(result);
+    }
+};
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+
+function myFunction(result) {
+    document.getElementById("public_ip").innerHTML = result.public_ip
+}
+</script>
+
 <!--Mobile specific meta goodness :)-->
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -18,6 +36,6 @@
 <table style="width:100%">
 <tr><td>Gateway:</td><td>{{gateway}}</td></tr>
 <tr><td>DNS:</td><td>{{dns}}</td></tr>
-<tr><td>Public IP:</td><td>{{publicip}}</td></tr>
+<tr><td>Public IP:</td><td><div id="public_ip"></div></td></tr>
 </table>
 
