@@ -1,5 +1,6 @@
 <!doctype html>
-
+<html>
+<body onload="send_requests()">
 <script>
 
 function async_request(url, callback, cbdata) {
@@ -23,9 +24,16 @@ function display_pings(result, id) {
     document.getElementById(id).innerHTML = result.pings
 }
 
-async_request("api/public_ip", display_public_ip, '');
-async_request("api/pings?host={{gateway}}", display_pings, "pings_gw");
-async_request("api/pings?host={{dns}}", display_pings, "pings_dns");
+function send_requests() {
+    async_request("api/public_ip", display_public_ip, '');
+    document.getElementById("public_ip").innerHTML = 'querying...';
+
+    async_request("api/pings?host={{gateway}}", display_pings, "pings_gw");
+    document.getElementById("pings_gw").innerHTML = 'pinging...';
+
+    async_request("api/pings?host={{dns}}", display_pings, "pings_dns");
+    document.getElementById("pings_dns").innerHTML = 'pinging...';
+}
 
 </script>
 
@@ -51,4 +59,6 @@ async_request("api/pings?host={{dns}}", display_pings, "pings_dns");
 <tr><td>Pings:</td><td><div id="pings_dns"></div></td></tr>
 <tr><td>Public IP:</td><td><div id="public_ip"></div></td></tr>
 </table>
+</body>
+</html>
 
