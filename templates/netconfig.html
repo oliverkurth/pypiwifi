@@ -20,8 +20,22 @@ function display_public_ip(result, data) {
     document.getElementById("public_ip").innerHTML = result.public_ip
 }
 
+function hex2(n)
+{
+    if (n < 16) {
+	return '0' + n.toString(16);
+    } else {
+        return n.toString(16);
+    }
+}
+
 function display_pings(result, id) {
-    document.getElementById(id).innerHTML = result.pings + "/10 pings";
+    var pings = result.pings;
+    var green = (pings * 25);
+    var red = ((10 - pings) * 25);
+    var color = '#' + hex2(red) + hex2(green) + '00';
+
+    document.getElementById(id).innerHTML = "<font color='" + color + "'>" + pings + "/10 pings</font>";
 }
 
 function send_requests() {
@@ -33,6 +47,9 @@ function send_requests() {
 
     async_request("api/pings?host={{dns}}", display_pings, "pings_dns");
     document.getElementById("pings_dns").innerHTML = 'pinging...';
+
+    async_request("api/pings?host=8.8.8.8", display_pings, "pings_internet");
+    document.getElementById("pings_internet").innerHTML = 'pinging...';
 }
 
 </script>
@@ -63,6 +80,12 @@ function send_requests() {
 <td>DNS:</td>
 <td>{{dns}}</td>
 <td><div id="pings_dns"></div></td>
+</tr>
+
+<tr>
+<td>Internet:</td>
+<td></td>
+<td><div id="pings_internet"></div></td>
 </tr>
 
 <tr><td>Public IP:</td><td><div id="public_ip"></div></td></tr>
