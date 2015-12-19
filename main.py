@@ -5,6 +5,7 @@ import netifaces
 import iwlib
 import sys
 import httplib2
+import socket
 
 import ping
 
@@ -32,7 +33,11 @@ def get_pings(host='8.8.8.8'):
 
 @app.route('/api/public_ip')
 def api_public_ip():
-	return '{"public_ip": "' + get_public_ip() + '"}'
+	ip = get_public_ip();
+	byaddr = socket.gethostbyaddr(ip)
+	hostname = byaddr[0]
+
+	return '{"public_ip": "' + ip + '", "public_hostname": "' + hostname + '"}'
 
 @app.route('/api/pings', methods=['GET'])
 def api_pings():

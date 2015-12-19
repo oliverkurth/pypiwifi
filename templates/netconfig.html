@@ -17,7 +17,7 @@ function async_request(url, callback, cbdata) {
 }
 
 function display_public_ip(result, data) {
-    document.getElementById("public_ip").innerHTML = result.public_ip
+    document.getElementById("public_ip").innerHTML = result.public_ip + "<br>(" + result.public_hostname + ")";
 }
 
 function hex2(n)
@@ -84,7 +84,7 @@ function send_requests() {
 
 <tr>
 <td>Internet:</td>
-<td></td>
+<td>(8.8.8.8)</td>
 <td><div id="pings_internet"></div></td>
 </tr>
 
