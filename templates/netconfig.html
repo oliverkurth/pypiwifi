@@ -65,10 +65,12 @@ function send_requests() {
 <tr>
 <td>{{ni}}</td>
 <td>{{addrs[ni]}}</td>
+    {% if essids[ni] %}
+<td>{{essids[ni]}}</td>
+    {% else %}
+<td></td>
+    {% endif %}
 </tr>
-  {% endif %}
-  {% if essids[ni] %}
-<tr><td>ESSID:</td><td>{{essids[ni]}}</td></tr>
   {% endif %}
 {% endfor %}
 
