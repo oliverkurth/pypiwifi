@@ -61,13 +61,15 @@ function send_requests() {
 
 <table style="width:100%">
 {% for ni in ifaces %}
+  {% if ni != 'lo' %}
 <tr>
 <td>{{ni}}</td>
 <td>{{addrs[ni]}}</td>
 </tr>
-{% if essids[ni] %}
+  {% endif %}
+  {% if essids[ni] %}
 <tr><td>ESSID:</td><td>{{essids[ni]}}</td></tr>
-{% endif %}
+  {% endif %}
 {% endfor %}
 
 <tr>
