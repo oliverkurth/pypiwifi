@@ -31,6 +31,10 @@ def get_pings(host='8.8.8.8'):
 	ret = ping.ping_counted(host)
 	return ret
 
+def get_uptime():
+	with open('/proc/uptime', 'r') as f:
+		return float(f.readline().split()[0])
+
 @app.route('/api/public_ip')
 def api_public_ip():
 	ip = get_public_ip();
@@ -43,6 +47,10 @@ def api_public_ip():
 def api_pings():
 	host = request.args.get('host')
 	return '{"pings": "' + str(get_pings(host)) + '"}'
+
+@app.route('/api/uptime')
+def api_uptime():
+	return '{"uptime":' + str(get_uptime()) + '}'
 
 @app.route('/')
 def show_netconfig():

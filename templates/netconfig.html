@@ -16,6 +16,10 @@ function async_request(url, callback, cbdata) {
     xmlhttp.send();
 }
 
+function display_uptime(result, data) {
+    document.getElementById("uptime").innerHTML = result.uptime + " seconds";
+}
+
 function display_public_ip(result, data) {
     document.getElementById("public_ip").innerHTML = result.public_ip + "<br>(" + result.public_hostname + ")";
 }
@@ -39,6 +43,9 @@ function display_pings(result, id) {
 }
 
 function send_requests() {
+    async_request("api/uptime", display_uptime, '');
+    document.getElementById("uptime").innerHTML = 'querying...';
+
     async_request("api/public_ip", display_public_ip, '');
     document.getElementById("public_ip").innerHTML = 'querying...';
 
@@ -60,6 +67,12 @@ function send_requests() {
 <title>{{name}}</title>
 
 <table style="width:100%">
+
+<tr>
+<td>Uptime:</td>
+<td><div id="uptime"></div></td>
+</tr>
+
 {% for ni in ifaces %}
   {% if ni != 'lo' %}
 <tr>
