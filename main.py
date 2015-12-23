@@ -43,6 +43,10 @@ def api_public_ip():
 
 	return '{"public_ip": "' + ip + '", "public_hostname": "' + hostname + '"}'
 
+@app.route('/api/client_ip')
+def api_client_ip():
+	return '{"client_ip": "' + request.remote_addr + '"}'
+
 @app.route('/api/pings', methods=['GET'])
 def api_pings():
 	host = request.args.get('host')
@@ -58,7 +62,11 @@ def show_netconfig():
 	ifaces = netifaces.interfaces()
 	addrs = {}
 	for ni in ifaces:
-		addrs[ni] = netifaces.ifaddresses(ni)[netifaces.AF_INET][0]['addr']
+		try:
+			addrs[ni] = netifaces.ifaddresses(ni)[netifaces.AF_INET][0]['addr']
+		except KeyError:
+			addrs[ni] = 'None'
+			pass
 
 	gws = netifaces.gateways()
 

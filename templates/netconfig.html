@@ -24,6 +24,10 @@ function display_public_ip(result, data) {
     document.getElementById("public_ip").innerHTML = result.public_ip + "<br>(" + result.public_hostname + ")";
 }
 
+function display_client_ip(result, data) {
+    document.getElementById("client_ip").innerHTML = result.client_ip;
+}
+
 function hex2(n)
 {
     if (n < 16) {
@@ -48,6 +52,9 @@ function send_requests() {
 
     async_request("api/public_ip", display_public_ip, '');
     document.getElementById("public_ip").innerHTML = 'querying...';
+
+    async_request("api/client_ip", display_client_ip, '');
+    document.getElementById("client_ip").innerHTML = 'querying...';
 
     async_request("api/pings?host={{gateway}}", display_pings, "pings_gw");
     document.getElementById("pings_gw").innerHTML = 'pinging...';
@@ -106,6 +113,7 @@ function send_requests() {
 </tr>
 
 <tr><td>Public IP:</td><td><div id="public_ip"></div></td></tr>
+<tr><td>Your IP:</td><td><div id="client_ip"></div></td></tr>
 </table>
 </body>
 </html>
