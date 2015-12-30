@@ -72,9 +72,10 @@ def show_netconfig():
 			addrs[ni] = 'None'
 			pass
 
+	gateway = 'None'
 	gws = netifaces.gateways()
-
-	gateway = gws['default'][netifaces.AF_INET][0]
+	if 'default' in gws and netifaces.AF_INET in gws['default']:
+		gateway = gws['default'][netifaces.AF_INET][0]
 
 	essids = {}
 	for ni in ifaces:
