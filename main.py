@@ -38,8 +38,12 @@ def get_uptime():
 @app.route('/api/public_ip')
 def api_public_ip():
 	ip = get_public_ip();
-	byaddr = socket.gethostbyaddr(ip)
-	hostname = byaddr[0]
+	hostname = 'unresolved'
+	try:
+		byaddr = socket.gethostbyaddr(ip)
+		hostname = byaddr[0]
+	except socket.herror:
+		pass
 
 	return '{"public_ip": "' + ip + '", "public_hostname": "' + hostname + '"}'
 
