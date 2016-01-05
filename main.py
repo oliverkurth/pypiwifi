@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from flask import Flask, render_template, request
+import json
 import netifaces
 import iwlib
 import sys
@@ -8,6 +9,7 @@ import httplib2
 import socket
 
 import ping
+from wpa import wpa_supplicant
 
 app = Flask(__name__)
 
@@ -59,6 +61,27 @@ def api_pings():
 @app.route('/api/uptime')
 def api_uptime():
 	return '{"uptime":' + str(get_uptime()) + '}'
+
+
+@app.route('/api/wpa/status', methods=['GET'])
+def api_wpa_status():
+	iface = request.args.get('iface')
+	wpa = wpa_supplicant(iface)
+	return json.dumps(wpa.status())
+
+@app.route('/api/wpa/scan_results', methods=['GET'])
+def api_wpa_scan_results():
+	iface = request.args.get('iface')
+	wpa = wpa_supplicant(iface)
+	result = wpa.scan_results()
+	return json.dumps(result)
+
+@app.route('/scan', methods=['GET'])
+def show_scan():
+	iface = request.args.get('iface')
+	wpa = wpa_supplicant(iface)
+	result = wpa.scan_results()
+	return render_template('scan.html', bss_list=result)
 
 @app.route('/')
 def show_netconfig():

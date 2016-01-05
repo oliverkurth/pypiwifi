@@ -25,7 +25,7 @@ class wpa_supplicant:
 		if do_scan:
 			out = self.wpa_cli('scan')
 		lines = self.wpa_cli('scan_results').splitlines()
-		attrs = lines[0].split(' / ')
+		attrs = ('bssid', 'frequency', 'level', 'flags', 'ssid')
 		bss_list = []
 		for l in lines[1:]:
 			vals = l.split("\t")

@@ -1,0 +1,19 @@
+<!--Mobile specific meta goodness :)-->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<title>{{name}}</title>
+
+<table style="width:100%">
+
+{% for bss in bss_list %}
+<tr>
+<td>{{bss['level']}}</td>
+<td>{{bss['ssid']}}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+</body>
+</html>
+
