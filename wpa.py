@@ -8,6 +8,9 @@ class wpa_supplicant:
 	def __init__(self, iface):
 		self.interface = iface
 
+	def f2c(f):
+		return int((f-2107)/5)
+
 	def wpa_cli(self, cmd, *args):
 		co_args = ["./wpawrapper", "-i", self.interface, cmd]
 		co_args.extend(args)
