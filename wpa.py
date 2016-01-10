@@ -6,13 +6,18 @@ import os
 class wpa_supplicant:
 
 	def __init__(self, iface):
+		self.use_wrapper = False
 		self.interface = iface
 
 	def f2c(f):
 		return int((f-2107)/5)
 
 	def wpa_cli(self, cmd, *args):
-		co_args = ["./wpawrapper", "-i", self.interface, cmd]
+		if self.use_wrapper:
+			cli = './wpawrapper'
+		else:
+			cli = '/sbin/wpa_cli'
+		co_args = [cli, '-i', self.interface, cmd]
 		co_args.extend(args)
 		return subprocess.check_output(co_args)
 
