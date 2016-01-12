@@ -82,6 +82,7 @@ def api_wpa_scan_results():
 	result = wpa.scan_results()
 	return json.dumps(result)
 
+
 @app.route('/scan', methods=['GET'])
 def show_scan():
 	iface = request.args.get('iface')
@@ -121,7 +122,7 @@ def show_netconfig():
 
 	return render_template('netconfig.html',
 		ifaces=ifaces, addrs=addrs, gateway=gateway,
-		essids=essids, dns=dnslist[0])
+		essids=essids, dns=dnslist[0], config_ifaces=config_ifaces)
 
 if __name__ == '__main__':
 	app.debug = True
