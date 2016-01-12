@@ -3,7 +3,6 @@
 from flask import Flask, render_template, request
 import json
 import netifaces
-import iwlib
 import sys
 import httplib2
 import socket
@@ -21,7 +20,6 @@ def read_config():
 	f.close()
 
 def get_public_ip():
-	print "get_public_ip()"
 	client = httplib2.Http()
 	response, content = client.request(config['public_ip_url'])
 
@@ -95,6 +93,7 @@ def show_scan():
 def show_netconfig():
 
 	ifaces = netifaces.interfaces()
+	config_ifaces = config['interfaces']
 	addrs = {}
 	for ni in ifaces:
 		try:
@@ -110,12 +109,13 @@ def show_netconfig():
 
 	essids = {}
 	for ni in ifaces:
-		try:
-			iwconfig = iwlib.get_iwconfig(ni)
-			essids[ni] = iwconfig['ESSID']
-		except IOError:
-			essids[ni] = ''
-			pass
+		essids[ni] = ''
+		if ni in config_ifaces:
+			if config_ifaces[ni] == 'wpa':
+				wpa = wpa_supplicant(ni)
+				status = wpa.status()
+				if status['wpa_state'] == 'COMPLETED':
+					essids[ni] = status['ssid']
 
 	dnslist = get_dns()
 
