@@ -12,10 +12,18 @@ import ping
 from wpa import wpa_supplicant
 
 app = Flask(__name__)
+config = {}
+
+def read_config():
+	global config
+	f = open('config.json', 'r')
+	config = json.load(f)
+	f.close()
 
 def get_public_ip():
+	print "get_public_ip()"
 	client = httplib2.Http()
-	response, content = client.request('http://whatismyip.akamai.com')
+	response, content = client.request(config['public_ip_url'])
 
 	return content
 
@@ -117,5 +125,6 @@ def show_netconfig():
 
 if __name__ == '__main__':
 	app.debug = True
+	read_config()
 	app.run(host='0.0.0.0')
 

@@ -1,0 +1,15 @@
+{
+	"wpa": {
+		"use_wrapper":"False"
+	},
+	"interfaces": {
+		"wlan0" : "wpa",
+		"eth0" : "None",
+		"alpha0" : "AP",
+		"lo" : "ignore"
+	},
+	"public_ip_url" : "http://whatismyip.akamai.com",
+	"internet_ip" : "8.8.8.8"
+}
+
+
