@@ -83,12 +83,25 @@ def api_wpa_scan_results():
 	return json.dumps(result)
 
 
-@app.route('/scan', methods=['GET'])
-def show_scan():
+@app.route('/wpa_scan', methods=['GET'])
+def show_wpa_scan():
 	iface = request.args.get('iface')
 	wpa = wpa_supplicant(iface)
 	result = wpa.scan_results()
 	return render_template('scan.html', bss_list=result)
+
+@app.route('/wpa_status', methods=['GET'])
+def show_wpa_status():
+	iface = request.args.get('iface')
+	wpa = wpa_supplicant(iface)
+	result = wpa.status()
+	if result['wpa_state'] == 'COMPLETED':
+		bss = {}
+		if 'bssid' in result:
+			bss = wpa.bss(result['bssid'])
+		return render_template('status_complete.html', name=iface, status=result, bss=bss)
+	else:
+		return render_template('status_other.html', name=iface, status=result)
 
 @app.route('/')
 def show_netconfig():

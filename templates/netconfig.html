@@ -84,7 +84,7 @@ function send_requests() {
   {% if ni != 'lo' %}
 <tr>
     {% if ni in config_ifaces and config_ifaces[ni] == 'wpa' %}
-<td><a href="/scan?iface={{ni}}">{{ni}}</a></td>
+<td><a href="/wpa_status?iface={{ni}}">{{ni}}</a></td>
     {% else %}
 <td>{{ni}}</td>
     {% endif %}

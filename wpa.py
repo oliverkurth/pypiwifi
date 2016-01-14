@@ -9,8 +9,8 @@ class wpa_supplicant:
 		self.use_wrapper = False
 		self.interface = iface
 
-	def f2c(f):
-		return int((f-2107)/5)
+	def f2c(self, f):
+		return int((f-2407)/5)
 
 	def wpa_cli(self, cmd, *args):
 		if self.use_wrapper:
@@ -27,6 +27,8 @@ class wpa_supplicant:
 		for l in lines:
 			key, val = l.split('=')
 			status[key] = val
+		if 'freq' in status:
+			status['channel'] = self.f2c(int(status['freq']))
 		return status
 
 	def scan_results(self, do_scan=True):
