@@ -9,6 +9,9 @@
 <tr>
 <td>{{bss['level']}}</td>
 <td>{{bss['ssid']}}</td>
+{% if 'nwid' in bss %}
+<td>{{bss['nwid']}}</td>
+{% endif %}
 </tr>
 {% endfor %}
 

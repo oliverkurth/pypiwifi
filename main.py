@@ -95,7 +95,18 @@ def show_wpa_scan():
 	iface = request.args.get('iface')
 	wpa = wpa_supplicant(iface)
 	result = wpa.scan_results()
-	return render_template('scan.html', bss_list=result)
+
+	nwlist = wpa.list_networks()
+	nwdict = {}
+	for i in range(0, len(nwlist)-1):
+		nwdict[nwlist[i]['ssid']] = nwlist[i]
+
+	for i in range(0, len(result)):
+		ssid = result[i]['ssid']
+		if ssid in nwdict and ( nwdict[ssid]['bssid'] == 'any' or nwdict[ssid]['bssid'] == result[i]['bssid'] ):
+			result[i]['nwid'] = nwdict[ssid]['id']
+
+	return render_template('scan.html', iface=iface, bss_list=result)
 
 @app.route('/wpa_status', methods=['GET'])
 def show_wpa_status():
