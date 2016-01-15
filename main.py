@@ -82,6 +82,13 @@ def api_wpa_scan_results():
 	result = wpa.scan_results()
 	return json.dumps(result)
 
+@app.route('/api/wpa/select_network', methods=['GET'])
+def api_wpa_select_network():
+	iface = request.args.get('iface')
+	nwid = request.args.get('id')
+	wpa = wpa_supplicant(iface)
+	wpa.select_network(nwid)
+	return json.dumps('OK')
 
 @app.route('/wpa_scan', methods=['GET'])
 def show_wpa_scan():

@@ -45,10 +45,10 @@ class wpa_supplicant:
 			bss_list.append(bss)
 		return bss_list
 
-	def bss(self, id, do_scan=False):
+	def bss(self, nwid, do_scan=False):
 		if do_scan:
 			out = self.wpa_cli('scan')
-		lines = self.wpa_cli('bss', id).splitlines()
+		lines = self.wpa_cli('bss', nwid).splitlines()
 		bss = {}
 		for l in lines:
 			key, val = l.split('=')
@@ -68,6 +68,9 @@ class wpa_supplicant:
 			bss_list.append(bss)
 		return bss_list
 
+	def select_network(self, nwid):
+		self.wpa_cli('select_network', nwid)
+		return
 
 if __name__ == '__main__':
 	wpa = wpa_supplicant('wlan0')
