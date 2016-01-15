@@ -63,7 +63,7 @@ class wpa_supplicant:
 		for l in lines[1:]:
 			vals = l.split()
 			bss = {}
-			for i in range(0, len(attrs)):
+			for i in range(0, len(attrs)-1):
 				bss[attrs[i]] = vals[i]
 			bss_list.append(bss)
 		return bss_list
