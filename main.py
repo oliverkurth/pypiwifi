@@ -90,6 +90,7 @@ def api_wpa_select_network():
 	wpa.select_network(nwid)
 	return json.dumps('OK')
 
+
 @app.route('/wpa_scan', methods=['GET'])
 def show_wpa_scan():
 	iface = request.args.get('iface')
@@ -108,18 +109,28 @@ def show_wpa_scan():
 
 	return render_template('scan.html', iface=iface, bss_list=result)
 
-@app.route('/wpa_status', methods=['GET'])
-def show_wpa_status():
-	iface = request.args.get('iface')
-	wpa = wpa_supplicant(iface)
+def _wpa_status(wpa, iface):
 	result = wpa.status()
 	if result['wpa_state'] == 'COMPLETED':
 		bss = {}
 		if 'bssid' in result:
 			bss = wpa.bss(result['bssid'])
-		return render_template('status_complete.html', name=iface, status=result, bss=bss)
+		return render_template('status_complete.html', iface=iface, status=result, bss=bss)
 	else:
 		return render_template('status_other.html', iface=iface, status=result)
+
+@app.route('/wpa_status', methods=['GET'])
+def show_wpa_status():
+	iface = request.args.get('iface')
+	wpa = wpa_supplicant(iface)
+	return _wpa_status(wpa, iface)
+
+@app.route('/wpa_disconnect', methods=['GET'])
+def show_disconnect():
+	iface = request.args.get('iface')
+	wpa = wpa_supplicant(iface)
+	wpa.disconnect(iface)
+	return _wpa_status(wpa, iface)
 
 @app.route('/')
 def show_netconfig():

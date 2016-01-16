@@ -68,6 +68,10 @@ class wpa_supplicant:
 			bss_list.append(bss)
 		return bss_list
 
+	def disconnect(self, nwid):
+		self.wpa_cli('disconnect')
+		return
+
 	def select_network(self, nwid):
 		self.wpa_cli('select_network', nwid)
 		return
