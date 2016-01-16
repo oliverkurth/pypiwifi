@@ -1,14 +1,14 @@
 <!--Mobile specific meta goodness :)-->
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-<title>{{name}}</title>
+<title>Scan Results</title>
 
-<table style="width:100%">
+<table style="width:100% max_width:100%">
 
 {% for bss in bss_list %}
 <tr>
 <td>{{bss['level']}}</td>
-<td>{{bss['ssid']}}</td>
+<td>{{bss['ssid'][:25]}}</td>
 {% if 'nwid' in bss %}
 <td>{{bss['nwid']}}</td>
 {% endif %}

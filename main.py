@@ -119,7 +119,7 @@ def show_wpa_status():
 			bss = wpa.bss(result['bssid'])
 		return render_template('status_complete.html', name=iface, status=result, bss=bss)
 	else:
-		return render_template('status_other.html', name=iface, status=result)
+		return render_template('status_other.html', iface=iface, status=result)
 
 @app.route('/')
 def show_netconfig():
