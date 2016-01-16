@@ -123,7 +123,6 @@ def show_wpa_status():
 
 @app.route('/')
 def show_netconfig():
-
 	ifaces = netifaces.interfaces()
 	config_ifaces = config['interfaces']
 	addrs = {}
@@ -155,8 +154,9 @@ def show_netconfig():
 		ifaces=ifaces, addrs=addrs, gateway=gateway,
 		essids=essids, dns=dnslist[0], config_ifaces=config_ifaces)
 
+
+read_config()
 if __name__ == '__main__':
 	app.debug = True
-	read_config()
 	app.run(host='0.0.0.0')
 
