@@ -2,6 +2,7 @@
 
 import subprocess
 import os
+import time
 
 class wpa_supplicant:
 
@@ -34,6 +35,7 @@ class wpa_supplicant:
 	def scan_results(self, do_scan=True):
 		if do_scan:
 			out = self.wpa_cli('scan')
+			time.sleep(1)
 		lines = self.wpa_cli('scan_results').splitlines()
 		attrs = ('bssid', 'frequency', 'level', 'flags', 'ssid')
 		bss_list = []
