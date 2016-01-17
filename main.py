@@ -126,10 +126,18 @@ def show_wpa_status():
 	return _wpa_status(wpa, iface)
 
 @app.route('/wpa_disconnect', methods=['GET'])
-def show_disconnect():
+def show_wpa_disconnect():
 	iface = request.args.get('iface')
 	wpa = wpa_supplicant(iface)
 	wpa.disconnect(iface)
+	return _wpa_status(wpa, iface)
+
+@app.route('/wpa_select', methods=['GET'])
+def show_wpa_select():
+	iface = request.args.get('iface')
+	nwid = request.args.get('id')
+	wpa = wpa_supplicant(iface)
+	wpa.select_network(nwid)
 	return _wpa_status(wpa, iface)
 
 @app.route('/')
