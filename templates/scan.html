@@ -3,14 +3,16 @@
 
 <title>Scan Results</title>
 
-<table style="width:100% max_width:100%">
+<table cellpadding="2" cellspacing="0" style="width:100% max_width:100%">
 
 {% for bss in bss_list %}
-<tr>
+<tr bgcolor="#{{bss['color']}}">
 <td>{{bss['level']}}</td>
 <td>{{bss['ssid'][:25]}}</td>
 {% if 'nwid' in bss %}
-<td><a href="wpa_select?iface={{iface}}&id={{bss['nwid']}}>connect</a></td>
+<td><a href="wpa_select?iface={{iface}}&id={{bss['nwid']}}">connect</a></td>
+{% else %}
+<td></td>
 {% endif %}
 </tr>
 {% endfor %}

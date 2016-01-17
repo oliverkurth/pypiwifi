@@ -91,6 +91,14 @@ def api_wpa_select_network():
 	return json.dumps('OK')
 
 
+def _range2color(value, min, max):
+	green = (value - min) * 255 / (max - min)
+	if green > 255:
+		green = 255
+	red = 255 - green
+	blue = 0
+	return "%0.2x%0.2x%0.2x" % (red,green,blue)
+
 @app.route('/wpa_scan', methods=['GET'])
 def show_wpa_scan():
 	iface = request.args.get('iface')
@@ -106,6 +114,8 @@ def show_wpa_scan():
 		ssid = result[i]['ssid']
 		if ssid in nwdict and ( nwdict[ssid]['bssid'] == 'any' or nwdict[ssid]['bssid'] == result[i]['bssid'] ):
 			result[i]['nwid'] = nwdict[ssid]['id']
+
+		result[i]['color'] = _range2color(int(result[i]['level']), -90, -20)
 
 	return render_template('scan.html', iface=iface, bss_list=result)
 
