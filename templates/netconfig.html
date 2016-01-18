@@ -1,5 +1,11 @@
 <!doctype html>
 <html>
+<head>
+    <!--css-->
+    <link rel="stylesheet" href="static/styles.css">
+    <!--Mobile specific meta goodness :)-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
 <body onload="send_requests()">
 <script>
 
@@ -68,12 +74,10 @@ function send_requests() {
 
 </script>
 
-<!--Mobile specific meta goodness :)-->
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <title>{{name}}</title>
 
-<table style="width:100%">
+<table class="main">
 
 <tr>
 <td>Uptime:</td>
