@@ -115,7 +115,7 @@ def show_wpa_scan():
 		if ssid in nwdict and ( nwdict[ssid]['bssid'] == 'any' or nwdict[ssid]['bssid'] == result[i]['bssid'] ):
 			result[i]['nwid'] = nwdict[ssid]['id']
 
-		result[i]['color'] = _range2color(int(result[i]['level']), -90, -20)
+		result[i]['color'] = _range2color(int(result[i]['level']), -90, -30)
 
 	return render_template('scan.html', iface=iface, bss_list=result)
 
