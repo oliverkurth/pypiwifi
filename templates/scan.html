@@ -7,19 +7,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 </head>
 <body>
+
+<script>
+
+function async_request(url, callback, cbdata) {
+    var xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var result = JSON.parse(xmlhttp.responseText);
+            callback(result, cbdata);
+        }
+    };
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+}
+
+function bss_info_cells(result, data) {
+    nwid = data;
+    bssid = result.bssid;
+    document.getElementById(bssid).innerHTML =
+       "<td>" +
+       "  <table>" +
+       "    <tr><td>SSID:</td><td>" + result.ssid + "</td></tr>" +
+       "    <tr><td>Channel:</td><td>" + result.channel + "</td></tr>" +
+       "    <tr><td>Level:</td><td>" + result.level + "</td></tr>" +
+       "    <tr><td>Flags:</td><td>" + result.flags + "</td></tr>" +
+       ( nwid != null && nwid != '' ?
+         "    <tr><td><a href='wpa_select?iface={{iface}}&d=" + nwid +  "'>connect</td></tr>" : "")  + 
+       "  </table>" +
+       "</td>";
+}
+
+</script>
+
 <title>Scan Results</title>
 
 <table class="scan">
 
 {% for bss in bss_list %}
-<tr bgcolor="#{{bss['color']}}">
-<td>{{bss['level']}}</td>
+{%   set bssid = bss['bssid'] %}
+<tr bgcolor="#{{bss['color']}}" id="{{bssid}}" onclick="async_request('api/wpa/bss?iface={{iface}}&id={{bssid}}', bss_info_cells, '{{bss['nwid']}}')" >
 <td>{{bss['ssid'][:25]}}</td>
-{% if 'nwid' in bss %}
-<td><a href="wpa_select?iface={{iface}}&id={{bss['nwid']}}">connect</a></td>
-{% else %}
-<td></td>
-{% endif %}
 </tr>
 {% endfor %}
 

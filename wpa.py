@@ -55,6 +55,8 @@ class wpa_supplicant:
 		for l in lines:
 			key, val = l.split('=')
 			bss[key] = val
+		if 'freq' in bss:
+			bss['channel'] = self.f2c(int(bss['freq']))
 		return bss
 
 	# network id / ssid / bssid / flags

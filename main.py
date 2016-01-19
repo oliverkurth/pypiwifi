@@ -90,6 +90,13 @@ def api_wpa_select_network():
 	wpa.select_network(nwid)
 	return json.dumps('OK')
 
+@app.route('/api/wpa/bss', methods=['GET'])
+def api_wpa_bss():
+	iface = request.args.get('iface')
+	id = request.args.get('id')
+	wpa = wpa_supplicant(iface)
+	return json.dumps(wpa.bss(id))
+
 
 def _range2color(value, min, max):
 	green = (value - min) * 255 / (max - min)
