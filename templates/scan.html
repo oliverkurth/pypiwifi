@@ -10,6 +10,9 @@
 
 <script>
 
+var iface = '{{iface}}';
+var expanded_cells = {};
+
 function async_request(url, callback, cbdata) {
     var xmlhttp = new XMLHttpRequest();
 
@@ -21,6 +24,17 @@ function async_request(url, callback, cbdata) {
     };
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
+}
+
+function expand_collapse_cell(bssid, ssid, nwid) {
+    if (expanded_cells[bssid] == undefined || !expanded_cells[bssid]) {
+        async_request('api/wpa/bss?iface=' + iface + '&id=' + bssid, bss_info_cells, nwid);
+        expanded_cells[bssid] = true;
+    } else {
+        document.getElementById(bssid).innerHTML =
+           "<td>" + ssid + "</td>";
+        expanded_cells[bssid] = false;
+    }
 }
 
 function bss_info_cells(result, data) {
@@ -47,7 +61,7 @@ function bss_info_cells(result, data) {
 
 {% for bss in bss_list %}
 {%   set bssid = bss['bssid'] %}
-<tr bgcolor="#{{bss['color']}}" id="{{bssid}}" onclick="async_request('api/wpa/bss?iface={{iface}}&id={{bssid}}', bss_info_cells, '{{bss['nwid']}}')" >
+<tr bgcolor="#{{bss['color']}}" id="{{bssid}}" onclick="expand_collapse_cell('{{bssid}}', '{{bss['ssid']}}', '{{bss['nwid']}}')" >
 <td>{{bss['ssid'][:25]}}</td>
 </tr>
 {% endfor %}
