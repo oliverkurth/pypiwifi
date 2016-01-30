@@ -26,6 +26,24 @@ function async_request(url, callback, cbdata) {
     xmlhttp.send();
 }
 
+function hex2(n)
+{
+    if (n < 16) {
+        return '0' + n.toString(16);
+    } else {
+        return n.toString(16);
+    }
+}
+
+function range2color(value, min, max) {
+    green = (value - min) * 255 / (max - min);
+    if (green > 255) {
+        green = 255;
+    }
+    red = 255 - green;
+    return '#' + hex2(red) + hex2(green) + '00';	 
+}
+
 function expand_collapse_cell(bssid, ssid, nwid) {
     if (expanded_cells[bssid] == undefined || !expanded_cells[bssid]) {
         async_request('api/wpa/bss?iface=' + iface + '&id=' + bssid, bss_info_cells, nwid);
