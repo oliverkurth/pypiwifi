@@ -10,7 +10,7 @@
 
 <script>
 
-var iface = '{{iface}}';
+var iface = '{{iface|safe|escapejs}}';
 var expanded_cells = {};
 
 function async_request(url, callback, cbdata) {
@@ -48,7 +48,7 @@ function bss_info_cells(result, data) {
        "    <tr><td>Level:</td><td>" + result.level + "</td></tr>" +
        "    <tr><td>Flags:</td><td>" + result.flags + "</td></tr>" +
        ( nwid != null && nwid != '' ?
-         "    <tr><td><a href='wpa_select?iface={{iface}}&d=" + nwid +  "'>connect</td></tr>" : "")  + 
+         "    <tr><td><a href='wpa_select?iface=" + iface + "&id=" + nwid +  "'>connect</td></tr>" : "")  +
        "  </table>" +
        "</td>";
 }
@@ -61,7 +61,7 @@ function bss_info_cells(result, data) {
 
 {% for bss in bss_list %}
 {%   set bssid = bss['bssid'] %}
-<tr bgcolor="#{{bss['color']}}" id="{{bssid}}" onclick="expand_collapse_cell('{{bssid}}', '{{bss['ssid']}}', '{{bss['nwid']}}')" >
+<tr bgcolor="#{{bss['color']}}" id="{{bssid}}" onclick="expand_collapse_cell('{{bssid}}', '{{bss['ssid']|safe|escapejs}}', '{{bss['nwid']}}')" >
 <td>{{bss['ssid'][:25]}}</td>
 </tr>
 {% endfor %}
