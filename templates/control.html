@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+    <!--css-->
+    <link rel="stylesheet" href="/static/styles.css">
+    <!--Mobile specific meta goodness :)-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body onload="send_requests()">
+<script>
+
+function async_request(url, callback, cbdata) {
+    var xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var result = JSON.parse(xmlhttp.responseText);
+            callback(result, cbdata);
+        }
+    };
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+}
+
+function redirect_main() {
+	window.location = '/'
+}
+
+function power(action) {
+	async_request('/api/control/power?action=' + action, redirect_main, null)
+}
+
+</script>
+
+<title>{{name}}</title>
+
+<table class="main">
+  <tr>
+    <td><button style="font-size:150%" type="button" onclick="power('reboot')">Reboot</button></td>
+    <td><button style="font-size:150%" type="button" onclick="power('halt')">Halt</button></td>
+  </tr>
+</table>
+
+<nav id="primary_nav">
+
+    <ul>
+        <li><a href="/">Main</a></li>
+    </ul>
+
+</nav><!--end primary_nav-->
+

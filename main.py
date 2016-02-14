@@ -9,6 +9,7 @@ import socket
 
 import ping
 from wpa import wpa_supplicant
+from control import Control
 
 app = Flask(__name__)
 config = {}
@@ -97,6 +98,15 @@ def api_wpa_bss():
 	wpa = wpa_supplicant(iface)
 	return json.dumps(wpa.bss(id))
 
+@app.route('/api/control/power', methods=['GET'])
+def api_control_power():
+	action = request.args.get('action')
+	control = Control(config['control'])
+	if action == 'halt':
+		control.halt()
+	elif action == 'reboot':
+		control.reboot()
+	return json.dumps('OK')
 
 def _range2color(value, min, max):
 	green = (value - min) * 255 / (max - min)
@@ -156,6 +166,10 @@ def show_wpa_select():
 	wpa = wpa_supplicant(iface)
 	wpa.select_network(nwid)
 	return _wpa_status(wpa, iface)
+
+@app.route('/control')
+def show_conrol():
+	return render_template('control.html')
 
 @app.route('/')
 def show_netconfig():

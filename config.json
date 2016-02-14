@@ -9,7 +9,15 @@
 		"lo" : "ignore"
 	},
 	"public_ip_url" : "http://whatismyip.akamai.com",
-	"internet_ip" : "8.8.8.8"
+	"internet_ip" : "8.8.8.8",
+	"control":{
+		"sudo_method": "sudo",
+		"shutdown": "/sbin/halt",
+		"reboot": "/sbin/reboot",
+		"services": {
+			"AP": "hostapd-alpha.service",
+			"wpa": "wpa_supplicant.service"
+		}
+	}
 }
-
 
