@@ -23,5 +23,14 @@ class Control:
 		self.do_call([self.config['reboot']] )
 
 	def list_services(self):
-		return keys(self.config['services'])
+		return self.config['services'].keys()
+
+	def service_status(self, service):
+		if service in self.config['services'].keys():
+			p = subprocess.Popen(['systemctl', 'is-failed', self.config['services'][service] ],
+			  stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+			output, error = p.communicate()
+			return output
+		else:
+			return 'unknown service ' + service
 

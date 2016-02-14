@@ -108,6 +108,12 @@ def api_control_power():
 		control.reboot()
 	return json.dumps('OK')
 
+@app.route('/api/control/service_status', methods=['GET'])
+def api_control_service_status():
+	service = request.args.get('service')
+	control = Control(config['control'])
+	return control.service_status(service)
+
 def _range2color(value, min, max):
 	green = (value - min) * 255 / (max - min)
 	if green > 255:

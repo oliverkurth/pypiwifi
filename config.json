@@ -16,7 +16,7 @@
 		"reboot": "/sbin/reboot",
 		"services": {
 			"AP": "hostapd-alpha.service",
-			"wpa": "wpa_supplicant.service"
+			"WPA": "wpa_supplicant.service"
 		}
 	}
 }
