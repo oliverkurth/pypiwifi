@@ -68,6 +68,10 @@ table.main tr:nth-child(even) {
     background-color: #dddddd;
 }
 
+button {
+   font-size:125%
+}
+
 /*navigation*/ 
  
 #primary_nav ul {

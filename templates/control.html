@@ -23,11 +23,22 @@ function async_request(url, callback, cbdata) {
 }
 
 function redirect_main() {
-	window.location = '/'
+	window.location = '/';
 }
 
 function power(action) {
 	async_request('/api/control/power?action=' + action, redirect_main, null)
+}
+
+function display_service_status(result, id)
+{
+	document.getElementById(id).innerHTML = result;
+}
+
+function send_requests() {
+{% for service in services %}
+	async_request('/api/control/service_status?service={{service}}', display_service_status, '{{service}}_status');
+{% endfor %}
 }
 
 </script>
@@ -35,9 +46,21 @@ function power(action) {
 <title>{{name}}</title>
 
 <table class="main">
+{% for service in services %}
   <tr>
-    <td><button style="font-size:150%" type="button" onclick="power('reboot')">Reboot</button></td>
-    <td><button style="font-size:150%" type="button" onclick="power('halt')">Halt</button></td>
+    <td>{{service}}</td>
+    <td id="{{service}}_status"></td>
+    <td><button type=button>Start</button></td>
+    <td><button type=button>Stop</button></td>
+    <td><button type=button>Restart</button></td>
+  </tr>
+{% endfor %}
+</table>
+
+<table class="main">
+  <tr>
+    <td><button type="button" onclick="power('reboot')">Reboot</button></td>
+    <td><button type="button" onclick="power('halt')">Halt</button></td>
   </tr>
 </table>
 

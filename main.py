@@ -112,7 +112,9 @@ def api_control_power():
 def api_control_service_status():
 	service = request.args.get('service')
 	control = Control(config['control'])
-	return control.service_status(service)
+	return json.dumps(control.service_status(service))
+
+
 
 def _range2color(value, min, max):
 	green = (value - min) * 255 / (max - min)
@@ -174,8 +176,9 @@ def show_wpa_select():
 	return _wpa_status(wpa, iface)
 
 @app.route('/control')
-def show_conrol():
-	return render_template('control.html')
+def show_control():
+	control = Control(config['control'])
+	return render_template('control.html', services = control.list_services())
 
 @app.route('/')
 def show_netconfig():
