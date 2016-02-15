@@ -30,6 +30,11 @@ function power(action) {
 	async_request('/api/control/power?action=' + action, redirect_main, null)
 }
 
+function service(service, action) {
+	async_request('/api/control/service?action=' + action + '&service=' + service,
+	              send_requests, null)
+}
+
 function display_service_status(result, id)
 {
 	document.getElementById(id).innerHTML = result;
@@ -50,9 +55,9 @@ function send_requests() {
   <tr>
     <td>{{service}}</td>
     <td id="{{service}}_status"></td>
-    <td><button type=button>Start</button></td>
-    <td><button type=button>Stop</button></td>
-    <td><button type=button>Restart</button></td>
+    <td><button type=button onclick="service('{{service}}', 'start')">Start</button></td>
+    <td><button type=button onclick="service('{{service}}', 'stop')">Stop</button></td>
+    <td><button type=button onclick="service('{{service}}', 'restart')">Restart</button></td>
   </tr>
 {% endfor %}
 </table>
