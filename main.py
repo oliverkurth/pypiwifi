@@ -108,6 +108,14 @@ def api_control_power():
 		control.reboot()
 	return json.dumps('OK')
 
+@app.route('/api/control/service', methods=['GET'])
+def api_control_service():
+	action = request.args.get('action')
+	service = request.args.get('service')
+	control = Control(config['control'])
+	control.service(service, action)
+	return json.dumps('OK')
+
 @app.route('/api/control/service_status', methods=['GET'])
 def api_control_service_status():
 	service = request.args.get('service')

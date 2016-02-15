@@ -14,7 +14,7 @@ class Control:
 		if self.sudo_method == 'sudo':
 			cmdargs = ['sudo']
 		cmd = cmdargs + args
-		subprocess.call(cmd)
+		return subprocess.call(cmd)
 
 	def halt(self):
 		self.do_call([self.config['halt']] )
@@ -33,4 +33,9 @@ class Control:
 			return output
 		else:
 			return 'unknown service ' + service
+
+	def service(self, service, action):
+		if service in self.list_services():
+			if action in ['start', 'stop', 'restart']:
+				return self.do_call(['systemctl', action, self.config['services'][service]])
 
