@@ -12,7 +12,7 @@
 	"internet_ip" : "8.8.8.8",
 	"control":{
 		"sudo_method": "sudo",
-		"shutdown": "/sbin/halt",
+		"halt": "/sbin/halt",
 		"reboot": "/sbin/reboot",
 		"services": {
 			"AP": "hostapd-alpha.service",
