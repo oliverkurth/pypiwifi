@@ -27,10 +27,12 @@ class Control:
 
 	def service_status(self, service):
 		if service in self.config['services'].keys():
-			p = subprocess.Popen(['systemctl', 'is-failed', self.config['services'][service] ],
-			  stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+			args = ['systemctl', 'is-failed', self.config['services'][service] ]
+			if self.sudo_method == 'sudo':
+				args = ['sudo'] + args
+			p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 			output, error = p.communicate()
-			return output
+			return output.rstrip()
 		else:
 			return 'unknown service ' + service
 
