@@ -52,6 +52,11 @@ function display_pings(result, id) {
     document.getElementById(id).innerHTML = "<font color='" + color + "'>" + pings + "/10 pings</font>";
 }
 
+function ping_button(host, id) {
+    async_request("api/pings?host=" + host, display_pings, id);
+    document.getElementById(id).innerHTML = 'pinging...';
+}
+
 function send_requests() {
     async_request("api/uptime", display_uptime, '');
     document.getElementById("uptime").innerHTML = 'querying...';
@@ -61,15 +66,6 @@ function send_requests() {
 
     async_request("api/client_ip", display_client_ip, '');
     document.getElementById("client_ip").innerHTML = 'querying...';
-
-    async_request("api/pings?host={{gateway}}", display_pings, "pings_gw");
-    document.getElementById("pings_gw").innerHTML = 'pinging...';
-
-    async_request("api/pings?host={{dns}}", display_pings, "pings_dns");
-    document.getElementById("pings_dns").innerHTML = 'pinging...';
-
-    async_request("api/pings?host=8.8.8.8", display_pings, "pings_internet");
-    document.getElementById("pings_internet").innerHTML = 'pinging...';
 }
 
 </script>
@@ -105,19 +101,19 @@ function send_requests() {
 <tr>
 <td>Gateway:</td>
 <td>{{gateway}}</td>
-<td><div id="pings_gw"></div></td>
+<td><button onclick='ping_button("{{gateway}}", "pings_gw")'><div id="pings_gw">Ping</div></button></td>
 </tr>
 
 <tr>
 <td>DNS:</td>
 <td>{{dns}}</td>
-<td><div id="pings_dns"></div></td>
+<td><button onclick='ping_button("{{dns}}", "pings_dns")'><div id="pings_dns">Ping</div></button></td>
 </tr>
 
 <tr>
 <td>Internet:</td>
 <td>(8.8.8.8)</td>
-<td><div id="pings_internet"></div></td>
+<td><button onclick='ping_button("8.8.8.8", "pings_internet")'><div id="pings_internet">Ping</div></button></td>
 </tr>
 
 <tr><td>Public IP:</td><td><div id="public_ip"></div></td></tr>
