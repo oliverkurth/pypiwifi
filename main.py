@@ -148,7 +148,11 @@ def show_wpa_scan():
 		if ssid in nwdict and ( nwdict[ssid]['bssid'] == 'any' or nwdict[ssid]['bssid'] == result[i]['bssid'] ):
 			result[i]['nwid'] = nwdict[ssid]['id']
 
-		result[i]['color'] = _range2color(int(result[i]['level']), 20, 80)
+		level = int(result[i]['level'])
+		# different drivers report different ranges - attempt to make it consistent
+		if level < 0:
+			level += 110
+		result[i]['color'] = _range2color(level, 20, 80)
 
 	return render_template('scan.html', iface=iface, bss_list=result)
 
