@@ -5,7 +5,7 @@
 	"interfaces": {
 		"wlan0" : "wpa",
 		"eth0" : "None",
-		"alpha0" : "AP",
+		"ap0" : "AP",
 		"lo" : "ignore"
 	},
 	"public_ip_url" : "http://whatismyip.akamai.com",
