@@ -50,7 +50,7 @@ function set_firewall() {
 <table class="main">
 {% for fw in firewalls %}
   <tr>
-    <td><input type="radio" id="{{fw['name']}}" name="fw_radio">{{fw['desc']}}</td>
+    <td><input type="radio" id="{{fw['name']}}" name="fw_radio" {{'checked' if (fw['name'] == current_fw)}}>{{fw['desc']}}</td>
   </tr>
 {% endfor %}
 </table>

@@ -53,7 +53,7 @@ class Control:
 
 	def select_firewall(self, fw_name):
 		self.do_call(['ln', '-fs', '{}/{}.rules'.format(self.FW_RULES_DIR, fw_name), self.FW_CURRENT_RULE])
-		self.service('iptables', 'restart')
+		return self.do_call(['systemctl', 'restart', 'iptables'])
 
 	def get_current_fw(self):
-		return os.path.basename(os.path.realpath(self.FW_CURRENT_RULE))
+		return os.path.basename(os.path.realpath(self.FW_CURRENT_RULE)).split('.')[0]
