@@ -122,7 +122,12 @@ def api_control_service_status():
 	control = Control(config['control'])
 	return json.dumps(control.service_status(service))
 
-
+@app.route('/api/fw/select', methods=['GET'])
+def api_fw_select():
+	name = request.args.get('name')
+	control = Control(config['control'])
+	control.select_firewall(name)
+	return json.dumps('OK')
 
 def _range2color(value, min, max):
 	green = (value - min) * 255 / (max - min)
@@ -191,6 +196,12 @@ def show_wpa_select():
 def show_control():
 	control = Control(config['control'])
 	return render_template('control.html', services = control.list_services())
+
+@app.route('/firewall')
+def show_firewall():
+	control = Control(config['control'])
+	firewalls = config['firewalls']
+	return render_template('firewall.html', firewalls=firewalls, current_fw=control.get_current_fw())
 
 @app.route('/')
 def show_netconfig():

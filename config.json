@@ -19,6 +19,11 @@
 			"WPA": "wpa_supplicant.service",
 			"NTP": "ntp.service"
 		}
-	}
+	},
+	"firewalls":[
+		{"name":"permissive", "desc":"allow all"},
+		{"name":"secure", "desc":"Secure protocols only"},
+		{"name":"none", "desc":"None (no masqerading either)"}
+	]
 }
 

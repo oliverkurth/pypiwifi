@@ -48,3 +48,12 @@ class Control:
 			elif service in self.list_services_names():
 				return self.do_call(['systemctl', action, self.config['services'][service]])
 
+	FW_RULES_DIR = '/etc/fw-rules.d/'
+	FW_CURRENT_RULE = '/etc/fw-rules.d/current.rules'
+
+	def select_firewall(self, fw_name):
+		self.do_call(['ln', '-fs', '{}/{}.rules'.format(self.FW_RULES_DIR, fw_name), self.FW_CURRENT_RULE])
+		self.service('iptables', 'restart')
+
+	def get_current_fw(self):
+		return os.path.basename(os.path.realpath(self.FW_CURRENT_RULE))

@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+    <!--css-->
+    <link rel="stylesheet" href="/static/styles.css">
+    <!--Mobile specific meta goodness :)-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body>
+<script>
+
+function async_request(url, callback, cbdata) {
+    var xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var result = JSON.parse(xmlhttp.responseText);
+            callback(result, cbdata);
+        }
+    };
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+}
+
+function service(service, action) {
+	async_request('/api/control/service?action=' + action + '&service=' + service,
+	              send_requests, null)
+}
+
+function set_firewall_cb() {
+}
+
+function set_firewall() {
+	var firewalls = {{firewalls|tojson|safe}};
+	var button;
+	for (i = 0; i < firewalls.length; i++) {
+		name = firewalls[i].name;
+		button = document.getElementById(name);
+		if (button.checked) {
+			async_request('/api/fw/select?name=' + name, set_firewall_cb, null);
+		}
+	}
+
+}
+
+</script>
+
+<title>Firewall Settings</title>
+
+<table class="main">
+{% for fw in firewalls %}
+  <tr>
+    <td><input type="radio" id="{{fw['name']}}" name="fw_radio">{{fw['desc']}}</td>
+  </tr>
+{% endfor %}
+</table>
+
+<table class="main">
+  <tr>
+    <td><button type="button" onclick="set_firewall()">Set</button></td>
+  </tr>
+</table>
+
+<nav id="primary_nav">
+
+    <ul>
+        <li><a href="/">Main</a></li>
+    </ul>
+
+</nav><!--end primary_nav-->
+
