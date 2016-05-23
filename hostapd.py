@@ -18,6 +18,14 @@ class hostapd:
 		co_args.extend(args)
 		return subprocess.check_output(co_args)
 
+	def get_config(self):
+		lines = self.hostapd_cli('get_config').splitlines()
+		config = {}
+		for l in lines:
+			key, val = l.split('=')
+			config[key] = val
+		return config
+
 	def all_sta(self):
 		lines = self.hostapd_cli('all_sta').splitlines()
 
@@ -36,5 +44,6 @@ class hostapd:
 
 if __name__ == '__main__':
 	ha = hostapd('alpha0')
+	print ha.get_config()
 	print ha.all_sta()
 
