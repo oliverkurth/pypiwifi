@@ -10,6 +10,7 @@ import socket
 import ping
 from wpa import wpa_supplicant
 from control import Control
+from hostapd import hostapd
 
 app = Flask(__name__)
 config = {}
@@ -224,11 +225,15 @@ def show_netconfig():
 	for ni in ifaces:
 		essids[ni] = ''
 		if ni in config_ifaces:
-			if config_ifaces[ni] == 'wpa':
+			if config_ifaces[ni].lower() == 'wpa':
 				wpa = wpa_supplicant(ni)
 				status = wpa.status()
 				if status['wpa_state'] == 'COMPLETED':
 					essids[ni] = status['ssid']
+			elif config_ifaces[ni].upper() == 'AP':
+				ha = hostapd(ni)
+				ha_config = ha.get_config()
+				essids[ni] = ha_config['ssid']
 
 	dnslist = get_dns()
 
