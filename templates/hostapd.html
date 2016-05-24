@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+    <!--css-->
+    <link rel="stylesheet" href="static/styles.css">
+    <!--Mobile specific meta goodness :)-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body>
+<title>{{name}}</title>
+
+<table class="main">
+
+<tr>
+<td>SSID:</td><td>{{ha['ssid']}}</td>
+</tr>
+<tr>
+<td>BSSID:</td><td>{{ha['bssid']}}</td>
+</tr>
+<tr>
+<td>Key Mgmt:</td><td>{{ha['key_mgmt']}}</td>
+</tr>
+</table>
+
+<nav id="primary_nav">
+
+    <ul>
+        <li><a href="/">Main</a></li>
+        <li><a href="">Reload</a></li>
+    </ul>
+
+</nav><!--end primary_nav-->
+
+</body>
+</html>
+

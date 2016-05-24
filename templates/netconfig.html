@@ -83,8 +83,10 @@ function send_requests() {
 {% for ni in ifaces %}
   {% if ni != 'lo' %}
 <tr>
-    {% if ni in config_ifaces and config_ifaces[ni] == 'wpa' %}
+    {% if ni in config_ifaces and config_ifaces[ni].lower() == 'wpa' %}
 <td><a href="/wpa_status?iface={{ni}}">{{ni}}</a></td>
+    {% elif ni in config_ifaces and config_ifaces[ni].upper() == 'AP' %}
+<td><a href="/hostapd?iface={{ni}}">{{ni}}</a></td>
     {% else %}
 <td>{{ni}}</td>
     {% endif %}

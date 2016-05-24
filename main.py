@@ -193,6 +193,12 @@ def show_wpa_select():
 	wpa.select_network(nwid)
 	return _wpa_status(wpa, iface)
 
+@app.route('/hostapd', methods=['GET'])
+def show_hostapd():
+	iface = request.args.get('iface')
+	ha = hostapd(iface)
+	return render_template('hostapd.html', iface=iface, ha=ha.get_config())
+
 @app.route('/control')
 def show_control():
 	control = Control(config['control'])
