@@ -26,7 +26,37 @@ class hostapd:
 			config[key] = val
 		return config
 
-	def all_sta(self):
+	# TODO: move to its own module
+	LEASES_FILE = '/var/lib/misc/dnsmasq.leases'
+	def dnsmasq_leases(self):
+		clients = {}
+		with open(self.LEASES_FILE, 'r') as f:
+			for line in f:
+				list = line.rstrip().split(' ')
+				if len(list) == 5:
+					mac = list[1]
+					clients[mac] = {'lease_expires':list[0], 'ip':list[2], 'name':list[3], 'uuid': list[4]}
+		return clients
+
+	def station(self, bssid, get_lease=True):
+		lines = self.hostapd_cli('sta', bssid).splitlines()
+
+		station = {}
+		for l in lines:
+			if re.match('([0-9a-fA-F]{2}:){5}([0-9a-fA-F]{2})', l):
+				if bssid != l:
+					return None
+			else:
+				key, val = l.split('=')
+				station[key] = val
+
+		if get_lease:
+			clients = self.dnsmasq_leases()
+			station.update(clients[bssid])
+
+		return station
+
+	def all_sta(self, get_leases=True):
 		lines = self.hostapd_cli('all_sta').splitlines()
 
 		stations = {}
@@ -40,6 +70,12 @@ class hostapd:
 				stations[sta_id][key] = val
 			else:
 				return None
+
+		if get_leases:
+			clients = self.dnsmasq_leases()
+			for id, sta in stations.iteritems():
+				sta.update(clients[id])
+
 		return stations
 
 if __name__ == '__main__':
