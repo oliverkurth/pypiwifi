@@ -99,6 +99,17 @@ def api_wpa_bss():
 	wpa = wpa_supplicant(iface)
 	return json.dumps(wpa.bss(id))
 
+@app.route('/api/hostapd/sta', methods=['GET'])
+def api_hostapd_sta():
+	iface = request.args.get('iface')
+	sta = request.args.get('sta')
+	ha = hostapd(iface)
+	if sta:
+		result = ha.station(sta)
+	else:
+		result = ha.all_sta()
+	return json.dumps(result)
+
 @app.route('/api/control/power', methods=['GET'])
 def api_control_power():
 	action = request.args.get('action')
