@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+    <!--css-->
+    <link rel="stylesheet" href="static/styles.css">
+    <!--Mobile specific meta goodness :)-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body>
+
+<script src="static/functions.js" type="text/javascript"></script>
+<script>
+
+var stations = {{stations|tojson}};
+
+var iface = '{{iface|safe|escapejs}}';
+var expanded_cells = {};
+
+function expand_collapse_cell(id) {
+    station = stations[id];
+    if (expanded_cells[id] == undefined || !expanded_cells[id]) {
+        expanded_cells[id] = true;
+        document.getElementById(id).innerHTML =
+            "<td colspan='3'>" +
+            "  <table>" +
+            "    <tr>" +
+            "      <td>" + id + "</td>" +
+            "      <td>" + station.ip + "</td>" +
+            "      <td>" + station.name + "</td>" +
+            "    </tr>" +
+            "    <tr>" +
+            "      <td>bytes received:</td><td>" + station.rx_bytes + "</td>" +
+            "      <td>bytes transmitted:</td><td>" + station.tx_bytes + "</td>" +
+            "    </tr>" +
+            "    <tr>" +
+            "      <td>connect time:</td><td>" + station.connected_time + "</td>" +
+            "    </tr>" +
+            "    <tr>" +
+            "      <td>flags:</td><td>" + station.flags + "</td>" +
+            "    </tr>" +
+            "  </table>" +
+            "</td>";
+    } else {
+        document.getElementById(id).innerHTML =
+            "<td>" + id + "</td>" +
+            "<td>" + station.ip + "</td>" +
+            "<td>" + station.name + "</td>";
+        expanded_cells[id] = false;
+    }
+}
+
+function bss_info_cells(result, data) {
+    nwid = data;
+    bssid = result.bssid;
+    document.getElementById(bssid).innerHTML =
+       "<td>" +
+       "  <table>" +
+       "    <tr><td>SSID:</td><td>" + result.ssid + "</td></tr>" +
+       "    <tr><td>Channel:</td><td>" + result.channel + "</td></tr>" +
+       "    <tr><td>Level:</td><td>" + result.level + "</td></tr>" +
+       "    <tr><td>Flags:</td><td>" + result.flags + "</td></tr>" +
+       ( nwid != null && nwid != '' ?
+         "    <tr><td><a href='wpa_select?iface=" + iface + "&id=" + nwid +  "'>connect</td></tr>" : "")  +
+       "  </table>" +
+       "</td>";
+}
+
+</script>
+
+<title>Scan Results</title>
+
+<table class="main">
+
+{% for id, sta in stations.iteritems() %}
+<tr id="{{id}}" onclick="expand_collapse_cell('{{id}}')">
+<td>{{id}}</td>
+<td>{{sta['ip']}}</td>
+<td>{{sta['name']}}</td>
+</tr>
+{% endfor %}
+
+</table>
+<nav id="primary_nav">
+
+    <ul>
+        <li><a href="/">Main</a></li>
+        <li><a href="/hostapd?iface={{iface}}">AP</a></li>
+        <li><a href="">Reload</a></li>
+    </ul>
+
+</nav><!--end primary_nav-->
+
+</body>
+</html>
+

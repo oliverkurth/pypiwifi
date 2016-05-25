@@ -210,6 +210,12 @@ def show_hostapd():
 	ha = hostapd(iface)
 	return render_template('hostapd.html', iface=iface, ha=ha.get_config())
 
+@app.route('/hostapd_stations', methods=['GET'])
+def show_hostapd_stations():
+	iface = request.args.get('iface')
+	ha = hostapd(iface)
+	return render_template('ha_stations.html', iface=iface, stations = ha.all_sta())
+
 @app.route('/control')
 def show_control():
 	control = Control(config['control'])
