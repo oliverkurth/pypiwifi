@@ -149,6 +149,8 @@ def _range2color(value, min, max):
 	green = (value - min) * 255 / (max - min)
 	if green > 255:
 		green = 255
+	elif green < 0:
+		green = 0
 	red = 255 - green
 	blue = 0
 	return "%0.2x%0.2x%0.2x" % (red,green,blue)
