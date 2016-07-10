@@ -6,6 +6,8 @@
 		"wlan0" : "wpa",
 		"eth0" : "None",
 		"ap0" : "AP",
+		"alpha0" : "AP",
+		"edi0" : "AP",
 		"lo" : "ignore"
 	},
 	"public_ip_url" : "http://whatismyip.akamai.com",
@@ -17,7 +19,8 @@
 		"services": {
 			"AP": "hostapd-alpha.service",
 			"WPA": "wpa_supplicant.service",
-			"NTP": "ntp.service"
+			"NTP": "ntp.service",
+			"GSM": "wvdial.service"
 		}
 	},
 	"firewalls":[
