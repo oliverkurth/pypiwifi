@@ -52,7 +52,8 @@ class hostapd:
 
 		if get_lease:
 			clients = self.dnsmasq_leases()
-			station.update(clients[bssid])
+			if bssid in clients:
+				station.update(clients[bssid])
 
 		return station
 
@@ -74,7 +75,8 @@ class hostapd:
 		if get_leases:
 			clients = self.dnsmasq_leases()
 			for id, sta in stations.iteritems():
-				sta.update(clients[id])
+				if id in clients:
+					sta.update(clients[id])
 
 		return stations
 
