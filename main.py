@@ -4,6 +4,7 @@ from flask import Flask, render_template, request
 import json
 import netifaces
 import sys
+import os
 import httplib2
 import socket
 
@@ -17,9 +18,12 @@ config = {}
 
 def read_config():
 	global config
-	f = open('config.json', 'r')
-	config = json.load(f)
-	f.close()
+	config_file = '/etc/pypiwifi/config.json'
+	if not os.path.exists(config_file):
+		config_file = 'config.json'
+	print "reading config from {}".format(config_file)
+	with open(config_file) as f:
+		config = json.load(f)
 
 def get_public_ip():
 	client = httplib2.Http()
