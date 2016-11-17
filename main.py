@@ -225,7 +225,7 @@ def show_hostapd_stations():
 @app.route('/control')
 def show_control():
 	control = Control(config['control'])
-	return render_template('control.html', services = control.list_services())
+	return render_template('control.html', services = control.list_services_names())
 
 @app.route('/firewall')
 def show_firewall():
