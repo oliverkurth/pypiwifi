@@ -49,6 +49,21 @@ def get_uptime():
 	with open('/proc/uptime', 'r') as f:
 		return float(f.readline().split()[0])
 
+@app.route('/api/net/ifaces')
+def api_net_ifaces():
+	ifaces = netifaces.interfaces()
+	return json.dumps(ifaces)
+
+@app.route('/api/net/addr', methods=['GET'])
+def api_net_addr():
+	iface = request.args.get('iface')
+	addrs = []
+	try:
+		addrs = netifaces.ifaddresses(iface)[netifaces.AF_INET]
+	except ValueError:
+		pass
+	return json.dumps(addrs)
+
 @app.route('/api/public_ip')
 def api_public_ip():
 	ip = get_public_ip();
