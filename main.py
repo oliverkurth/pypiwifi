@@ -60,7 +60,7 @@ def api_net_addr():
 	addrs = []
 	try:
 		addrs = netifaces.ifaddresses(iface)[netifaces.AF_INET]
-	except ValueError:
+	except (ValueError, KeyError):
 		pass
 	return json.dumps(addrs)
 
