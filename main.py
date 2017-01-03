@@ -12,6 +12,7 @@ import ping
 from wpa import wpa_supplicant
 from control import Control
 from hostapd import hostapd
+import wpaconf
 
 app = Flask(__name__)
 config = {}
@@ -117,6 +118,11 @@ def api_wpa_bss():
 	id = request.args.get('id')
 	wpa = wpa_supplicant(iface)
 	return json.dumps(wpa.bss(id))
+
+@app.route('/api/wpaconf/getconf', methods=['GET'])
+def api_wpaconf_getconf():
+	conf = wpaconf.parse('/etc/wpa_supplicant/wpa_supplicant.conf')
+	return json.dumps(conf)
 
 @app.route('/api/hostapd/sta', methods=['GET'])
 def api_hostapd_sta():
