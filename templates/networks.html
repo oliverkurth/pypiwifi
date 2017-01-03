@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+    <!--css-->
+    <link rel="stylesheet" href="/static/styles.css">
+    <!--Mobile specific meta goodness :)-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body>
+
+<script src="static/functions.js" type="text/javascript"></script>
+<script>
+
+var iface = '{{iface|safe|escapejs}}';
+var expanded_cells = {};
+
+function expand_collapse_cell(bssid, ssid, nwid) {
+    if (expanded_cells[bssid] == undefined || !expanded_cells[bssid]) {
+        async_request('api/wpa/bss?iface=' + iface + '&id=' + bssid, bss_info_cells, nwid);
+        expanded_cells[bssid] = true;
+    } else {
+        document.getElementById(bssid).innerHTML =
+           "<td>" + ssid + "</td>";
+        expanded_cells[bssid] = false;
+    }
+}
+
+function bss_info_cells(result, data) {
+    nwid = data;
+    bssid = result.bssid;
+    document.getElementById(bssid).innerHTML =
+       "<td>" +
+       "  <table>" +
+       "    <tr><td>SSID:</td><td>" + result.ssid + "</td></tr>" +
+       "    <tr><td>Channel:</td><td>" + result.channel + "</td></tr>" +
+       "    <tr><td>Level:</td><td>" + result.level + "</td></tr>" +
+       "    <tr><td>Flags:</td><td>" + result.flags + "</td></tr>" +
+       ( nwid != null && nwid != '' ?
+         "    <tr><td><a href='wpa_select?iface=" + iface + "&id=" + nwid +  "'>connect</td></tr>" : "")  +
+       "  </table>" +
+       "</td>";
+}
+
+</script>
+
+<title>Configured Networks</title>
+
+<table class="main">
+
+{% for n in networks %}
+<tr id="{{n|safe}}">
+<td>{{n|safe}}</td>
+</tr>
+{% endfor %}
+
+{% set thisitem = 'networks' %}
+{% include 'wpa_menu.html' %}
+
+</body>
+</html>
+

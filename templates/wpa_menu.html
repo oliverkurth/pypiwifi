@@ -1,0 +1,26 @@
+{% set items = {
+	'main' : '/',
+	'scan' : '/wpa_scan?iface=' ~ iface,
+	'status' : '/wpa_status?iface=' ~ iface,
+	'networks' : '/wpaconf/networks?iface=' ~ iface,
+} %}
+{% set descs = {
+	'main' : 'Main',
+	'scan' : 'Scan',
+	'status' : 'Status',
+	'networks' : 'Networks',
+} %}
+
+</table>
+<nav id="primary_nav">
+    <ul>
+{% for item, link in items.iteritems() %}
+	{% if item == thisitem %}
+        <li><a href="">Reload</a></li>
+	{% else %}
+        <li><a href="{{link}}">{{descs[item]}}</a></li>
+	{% endif %}
+{% endfor %}
+    </ul>
+</nav><!--end primary_nav-->
+
