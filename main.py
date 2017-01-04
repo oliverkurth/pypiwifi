@@ -55,14 +55,18 @@ def api_net_ifaces():
 	ifaces = netifaces.interfaces()
 	return json.dumps(ifaces)
 
-@app.route('/api/net/addr', methods=['GET'])
-def api_net_addr():
-	iface = request.args.get('iface')
+def _net_addr(iface):
 	addrs = []
 	try:
 		addrs = netifaces.ifaddresses(iface)[netifaces.AF_INET]
 	except (ValueError, KeyError):
 		pass
+	return addrs
+
+@app.route('/api/net/addr', methods=['GET'])
+def api_net_addr():
+	iface = request.args.get('iface')
+	addrs = _net_addr(iface)
 	return json.dumps(addrs)
 
 @app.route('/api/public_ip')
@@ -94,8 +98,16 @@ def api_uptime():
 @app.route('/api/wpa/status', methods=['GET'])
 def api_wpa_status():
 	iface = request.args.get('iface')
+	getbss = request.args.get('getbss')
+	getaddrs = request.args.get('getaddrs')
 	wpa = wpa_supplicant(iface)
-	return json.dumps(wpa.status())
+	status = wpa.status()
+	if getbss != None and 'bssid' in status:
+		status['bss'] = wpa.bss(status['bssid'])
+	if getaddrs != None:
+		status['addrs'] = _net_addr(iface)
+
+	return json.dumps(status)
 
 @app.route('/api/wpa/scan_results', methods=['GET'])
 def api_wpa_scan_results():
