@@ -49,22 +49,6 @@ function expand_collapse_cell(id) {
     }
 }
 
-function bss_info_cells(result, data) {
-    nwid = data;
-    bssid = result.bssid;
-    document.getElementById(bssid).innerHTML =
-       "<td>" +
-       "  <table>" +
-       "    <tr><td>SSID:</td><td>" + result.ssid + "</td></tr>" +
-       "    <tr><td>Channel:</td><td>" + result.channel + "</td></tr>" +
-       "    <tr><td>Level:</td><td>" + result.level + "</td></tr>" +
-       "    <tr><td>Flags:</td><td>" + result.flags + "</td></tr>" +
-       ( nwid != null && nwid != '' ?
-         "    <tr><td><a href='wpa_select?iface=" + iface + "&id=" + nwid +  "'>connect</td></tr>" : "")  +
-       "  </table>" +
-       "</td>";
-}
-
 </script>
 
 <title>Scan Results</title>

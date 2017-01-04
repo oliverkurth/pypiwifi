@@ -221,27 +221,10 @@ def show_wpa_scan():
 
 	return render_template('scan.html', iface=iface, bss_list=result)
 
-def _wpa_status(wpa, iface):
-	result = wpa.status()
-	if result['wpa_state'] == 'COMPLETED':
-		bss = {}
-		if 'bssid' in result:
-			bss = wpa.bss(result['bssid'])
-		return render_template('status_complete.html', iface=iface, status=result, bss=bss)
-	else:
-		return render_template('status_other.html', iface=iface, status=result)
-
 @app.route('/wpa_status', methods=['GET'])
 def show_wpa_status():
 	iface = request.args.get('iface')
 	return render_template('wpa_status.html', iface=iface)
-
-@app.route('/wpa_disconnect', methods=['GET'])
-def show_wpa_disconnect():
-	iface = request.args.get('iface')
-	wpa = wpa_supplicant(iface)
-	wpa.disconnect(iface)
-	return _wpa_status(wpa, iface)
 
 @app.route('/wpa_select', methods=['GET'])
 def show_wpa_select():
@@ -249,7 +232,7 @@ def show_wpa_select():
 	nwid = request.args.get('id')
 	wpa = wpa_supplicant(iface)
 	wpa.select_network(nwid)
-	return _wpa_status(wpa, iface)
+	return render_template('wpa_status.html', iface=iface)
 
 @app.route('/hostapd', methods=['GET'])
 def show_hostapd():
