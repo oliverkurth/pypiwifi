@@ -53,17 +53,10 @@ function bss_info_cells(result, data) {
 <td>{{bss['ssid'][:25]}}</td>
 </tr>
 {% endfor %}
-
 </table>
-<nav id="primary_nav">
 
-    <ul>
-        <li><a href="/">Main</a></li>
-        <li><a href="/wpa_status?iface={{iface}}">Status</a></li>
-        <li><a href="">Reload</a></li>
-    </ul>
-
-</nav><!--end primary_nav-->
+{% set thisitem = 'scan' %}
+{% include 'wpa_menu.html' %}
 
 </body>
 </html>
