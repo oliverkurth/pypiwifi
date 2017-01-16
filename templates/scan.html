@@ -36,7 +36,14 @@ function bss_info_cells(result, data) {
        "    <tr><td>Level:</td><td>" + result.level + "</td></tr>" +
        "    <tr><td>Flags:</td><td>" + result.flags + "</td></tr>" +
        ( nwid != null && nwid != '' ?
-         "    <tr><td><a href='wpa_select?iface=" + iface + "&id=" + nwid +  "'>connect</td></tr>" : "")  +
+         "    <tr>" +
+                  "<td><a href='/wpa_select?iface=" + iface + "&id=" + nwid +  "'>connect</td>" +
+                  "<td><a href='/wpaconf/edit_network?iface=" + iface + "&ssid=" + result.ssid +  "'>edit</td>" +
+         "      </tr>" :
+         "      <tr>" +
+                  "<td><a href='/wpaconf/edit_network?iface=" + iface + "&ssid=" + result.ssid +  "'>add</td>" +
+         "      </tr>"
+       )  +
        "  </table>" +
        "</td>";
 }
