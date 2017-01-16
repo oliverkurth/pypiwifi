@@ -55,9 +55,7 @@ def api_net_ifaces():
 	ifaces = netifaces.interfaces()
 	return json.dumps(ifaces)
 
-@app.route('/api/net/addr', methods=['GET'])
-def api_net_addr():
-	iface = request.args.get('iface')
+def _net_addr(iface):
 	addrs = []
 
 	try:
@@ -70,6 +68,12 @@ def api_net_addr():
 	except (KeyError):
 		pass
 
+	return addrs
+
+@app.route('/api/net/addr', methods=['GET'])
+def api_net_addr():
+	iface = request.args.get('iface')
+	addrs = _net_addr(iface)
 	return json.dumps(addrs)
 
 @app.route('/api/public_ip')
@@ -101,8 +105,16 @@ def api_uptime():
 @app.route('/api/wpa/status', methods=['GET'])
 def api_wpa_status():
 	iface = request.args.get('iface')
+	getbss = request.args.get('getbss')
+	getaddrs = request.args.get('getaddrs')
 	wpa = wpa_supplicant(iface)
-	return json.dumps(wpa.status())
+	status = wpa.status()
+	if getbss != None and 'bssid' in status:
+		status['bss'] = wpa.bss(status['bssid'])
+	if getaddrs != None:
+		status['addrs'] = _net_addr(iface)
+
+	return json.dumps(status)
 
 @app.route('/api/wpa/scan_results', methods=['GET'])
 def api_wpa_scan_results():
@@ -119,6 +131,13 @@ def api_wpa_select_network():
 	wpa.select_network(nwid)
 	return json.dumps('OK')
 
+@app.route('/api/wpa/disconnect', methods=['GET'])
+def api_wpa_disconnect():
+	iface = request.args.get('iface')
+	wpa = wpa_supplicant(iface)
+	wpa.disconnect(iface)
+	return json.dumps('OK')
+
 @app.route('/api/wpa/bss', methods=['GET'])
 def api_wpa_bss():
 	iface = request.args.get('iface')
@@ -130,6 +149,29 @@ def api_wpa_bss():
 def api_wpaconf_getconf():
 	conf = wpaconf.parse('/etc/wpa_supplicant/wpa_supplicant.conf')
 	return json.dumps(conf)
+
+def wpaconf_networks(conf):
+	names = []
+	try:
+		networks = conf['network']
+		names = [ n['ssid'].strip('"') for n in networks ]
+	except KeyError:
+		pass
+	return names
+
+@app.route('/api/wpaconf/networks', methods=['GET'])
+def api_wpaconf_networks():
+	conf = wpaconf.parse('/etc/wpa_supplicant/wpa_supplicant.conf')
+	return json.dumps(wpaconf_networks(conf))
+
+@app.route('/api/wpaconf/setnetwork', methods=['GET'])
+def api_wpaconf_setnetwork():
+	name = request.args.get('name')
+	passwd = request.args.get('password')
+	conf = wpaconf.parse('/etc/wpa_supplicant/wpa_supplicant.conf')
+	wpaconf.setnetwork(conf, name, passwd)
+	wpaconf.unparse(conf, '/etc/wpa_supplicant/wpa_supplicant.conf')
+	return json.dumps('OK')
 
 @app.route('/api/hostapd/sta', methods=['GET'])
 def api_hostapd_sta():
@@ -207,28 +249,10 @@ def show_wpa_scan():
 
 	return render_template('scan.html', iface=iface, bss_list=result)
 
-def _wpa_status(wpa, iface):
-	result = wpa.status()
-	if result['wpa_state'] == 'COMPLETED':
-		bss = {}
-		if 'bssid' in result:
-			bss = wpa.bss(result['bssid'])
-		return render_template('status_complete.html', iface=iface, status=result, bss=bss)
-	else:
-		return render_template('status_other.html', iface=iface, status=result)
-
 @app.route('/wpa_status', methods=['GET'])
 def show_wpa_status():
 	iface = request.args.get('iface')
-	wpa = wpa_supplicant(iface)
-	return _wpa_status(wpa, iface)
-
-@app.route('/wpa_disconnect', methods=['GET'])
-def show_wpa_disconnect():
-	iface = request.args.get('iface')
-	wpa = wpa_supplicant(iface)
-	wpa.disconnect(iface)
-	return _wpa_status(wpa, iface)
+	return render_template('wpa_status.html', iface=iface)
 
 @app.route('/wpa_select', methods=['GET'])
 def show_wpa_select():
@@ -236,13 +260,20 @@ def show_wpa_select():
 	nwid = request.args.get('id')
 	wpa = wpa_supplicant(iface)
 	wpa.select_network(nwid)
-	return _wpa_status(wpa, iface)
+	return render_template('wpa_status.html', iface=iface)
 
 @app.route('/hostapd', methods=['GET'])
 def show_hostapd():
 	iface = request.args.get('iface')
 	ha = hostapd(iface)
 	return render_template('hostapd.html', iface=iface, ha=ha.get_config())
+
+@app.route('/wpaconf/networks')
+def show_wpaconf_networks():
+	iface = request.args.get('iface')
+	conf = wpaconf.parse('/etc/wpa_supplicant/wpa_supplicant.conf')
+	names = wpaconf_networks(conf)
+	return render_template('networks.html', networks=names, iface=iface)
 
 @app.route('/hostapd_stations', methods=['GET'])
 def show_hostapd_stations():

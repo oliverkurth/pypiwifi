@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import os
 import json
 
 def parse(file):
@@ -29,7 +30,7 @@ def parse(file):
 
 def unparsef(conf, f, level):
 	for key, val in conf.iteritems():
-		if type(val) == str:
+		if type(val) == str or type(val) == unicode:
 			f.write("{}{}={}\n".format("\t"*level, key, val))
 		elif type(val) == list:
 			for c in val:
@@ -38,12 +39,39 @@ def unparsef(conf, f, level):
 				f.write("}\n")
 
 
-def unparse(conf, file, level = 0):
+def unparse(conf, file, level = 0, backup = True):
+	if backup:
+		if os.path.isfile(file):
+			os.rename(file, file + ".saved")
 	with open(file, "w+") as f:
 		unparsef(conf, f, level)
+
+
+def setnetwork(conf, name, password):
+	for n in conf['network']:
+		if n['ssid'].strip('"') == name:
+			conf['network'].remove(n)
+	if password != None:
+		network = {
+			"group":"CCMP TKIP WEP104 WEP40",
+			"key_mgmt": "WPA-PSK",
+			"pairwise": "CCMP TKIP",
+			"priority": "5",
+			"proto": "WPA RSN",
+			"psk": '"' + password + '"',
+			"ssid": '"' + name + '"'
+		}
+	else:
+		network = {
+			"key_mgmt": "NONE",
+			"ssid": '"' + name + '"'
+		}
+	print type(name)
+	conf['network'].append(network)
+
 
 if __name__ == '__main__':
 	conf = parse("/etc/wpa_supplicant/wpa_supplicant.conf")
 #	print json.dumps(parse("/etc/wpa_supplicant/wpa_supplicant.conf"))
-	unparse(conf, "/tmp/wpa_supplicant.conf")
+	unparse(conf, "/etc/wpa_supplicant/wpa_supplicant.conf")
 

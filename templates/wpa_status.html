@@ -27,9 +27,10 @@ function status_table(result, data) {
         document.getElementById('status').innerHTML =
            "  <table class='main'>" +
            "    <tr><td>SSID:</td><td>" + result.ssid + "</td></tr>" +
-           "    <tr><td>Channel:</td><td>" + result.channel + "</td></tr>" +
-           "    <tr><td>Level:</td><td>" + result.level + "</td></tr>" +
+           "    <tr><td>Channel:</td><td>" + result.bss.channel + "</td></tr>" +
+           "    <tr><td>Level:</td><td>" + result.bss.level + "</td></tr>" +
            "    <tr><td>State:</td><td>" + result.wpa_state + "</td></tr>" +
+           "    <tr><td>IP address:</td><td>" + ((result.addrs.length > 0) ? result.addrs[0].addr : "None") + "</td></tr>" +
            "    <td colspan=2><button type=button onclick='disconnect()'>Disconnect</button></td>"
            "  </table>";
     } else {
@@ -41,7 +42,7 @@ function status_table(result, data) {
 }
 
 function send_requests() {
-    async_request('/api/wpa/status?iface=' + iface, status_table, null);
+    async_request('/api/wpa/status?getaddrs&getbss&iface=' + iface, status_table, null);
 }
 
 </script>
