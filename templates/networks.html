@@ -50,6 +50,7 @@ function bss_info_cells(result, data) {
 {% for n in networks %}
 <tr id="{{n|safe}}">
 <td>{{n|safe}}</td>
+<td align="right"><a href="/wpaconf/edit_network?iface={{iface}}&ssid={{n|safe}}">edit</a>
 </tr>
 {% endfor %}
 
