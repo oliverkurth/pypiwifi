@@ -8,17 +8,36 @@
 </head>
 <body>
 <script src="/static/functions.js" type="text/javascript"></script>
+<script>
 
+function saved_cb(result, data) {
+  if (result == "OK"){
+     alert("Saved");
+  } else {
+     alert("Something went wrong");
+  }
+}
+
+function save_network() {
+    ssid = document.getElementById("ssid").value;
+    password = document.getElementById("password").value;
+    if (password == '') {
+        async_request('/api/wpaconf/setnetwork?name=' + ssid, saved_cb, null);
+    } else {
+        async_request('/api/wpaconf/setnetwork?name=' + ssid + '&password=' + password, saved_cb, null);
+    }
+}
+
+</script>
 <title>{{name}}</title>
 
 <table>
-  <tr><td>Name: </td><td><input type="text" name="name" value="{{ssid}}"></input></td></tr> 
-  <tr><td>Password: </td><td><input type="text" name="password" value="{{password}}"></input></td></tr>
+  <tr><td>Name: </td><td><input id="ssid" type="text" name="name" value="{{ssid}}"></input></td></tr>
+  <tr><td>Password: </td><td><input id="password" type="text" name="password" value="{{password}}"></input></td></tr>
 </table>
 <table>
   <tr>
-    <td><button>Save</button></td>
-    <td><button>Cancel</button></td>
+    <td><button onclick="save_network()">Save</button></td>
   </tr> 
 </table>
 
