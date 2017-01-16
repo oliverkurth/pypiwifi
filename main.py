@@ -275,6 +275,13 @@ def show_wpaconf_networks():
 	names = wpaconf_networks(conf)
 	return render_template('networks.html', networks=names, iface=iface)
 
+@app.route('/wpaconf/edit_network')
+def show_wpa_edit_network():
+	iface = request.args.get('iface')
+	ssid = request.args.get('ssid', '')
+	password = request.args.get('password', '')
+	return render_template('wpa_network.html', ssid=ssid, password=password, iface=iface)
+
 @app.route('/hostapd_stations', methods=['GET'])
 def show_hostapd_stations():
 	iface = request.args.get('iface')
