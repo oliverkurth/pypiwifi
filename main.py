@@ -59,10 +59,17 @@ def api_net_ifaces():
 def api_net_addr():
 	iface = request.args.get('iface')
 	addrs = []
+
 	try:
-		addrs = netifaces.ifaddresses(iface)[netifaces.AF_INET]
-	except (ValueError, KeyError):
+		addrs = netifaces.ifaddresses(iface)
+	except (ValueError):
+		return json.dumps({"message": "no interface"}), 503
+
+	try:
+		inet_addrs = addrs[netifaces.AF_INET]
+	except (KeyError):
 		pass
+
 	return json.dumps(addrs)
 
 @app.route('/api/public_ip')
