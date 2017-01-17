@@ -57,6 +57,7 @@ def api_net_ifaces():
 
 def _net_addr(iface):
 	addrs = []
+	inet_addrs = []
 
 	try:
 		addrs = netifaces.ifaddresses(iface)
