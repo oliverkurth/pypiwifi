@@ -15,13 +15,12 @@ var iface = '{{iface|safe|escapejs}}';
 var expanded_cells = {};
 
 function expand_collapse_cell(bssid, ssid, nwid) {
-    if (expanded_cells[bssid] == undefined || !expanded_cells[bssid]) {
+    expanded_cells[bssid] = !expanded_cells[bssid];
+    if (expanded_cells[bssid]) {
         async_request('/api/wpa/bss?iface=' + iface + '&id=' + bssid, bss_info_cells, nwid);
-        expanded_cells[bssid] = true;
     } else {
         document.getElementById(bssid).innerHTML =
            "<td>" + ssid + "</td>";
-        expanded_cells[bssid] = false;
     }
 }
 
