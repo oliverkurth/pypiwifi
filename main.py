@@ -230,25 +230,25 @@ def _range2color(value, min, max):
 def show_wpa_scan():
 	iface = request.args.get('iface')
 	wpa = wpa_supplicant(iface)
-	result = wpa.scan_results()
+	scan_list = wpa.scan_results()
 
 	nwlist = wpa.list_networks()
 	nwdict = {}
-	for i in range(0, len(nwlist)):
-		nwdict[nwlist[i]['ssid']] = nwlist[i]
+	for nw in nwlist:
+		nwdict[nw['ssid']] = nw
 
-	for i in range(0, len(result)):
-		ssid = result[i]['ssid']
-		if ssid in nwdict and ( nwdict[ssid]['bssid'] == 'any' or nwdict[ssid]['bssid'] == result[i]['bssid'] ):
-			result[i]['nwid'] = nwdict[ssid]['id']
+	for bss in scan_list:
+		ssid = bss['ssid']
+		if ssid in nwdict and ( nwdict[ssid]['bssid'] == 'any' or nwdict[ssid]['bssid'] == bss['bssid'] ):
+			bss['nwid'] = nwdict[ssid]['id']
 
-		level = int(result[i]['level'])
+		level = int(bss['level'])
 		# different drivers report different ranges - attempt to make it consistent
 		if level < 0:
 			level += 110
-		result[i]['color'] = _range2color(level, 20, 80)
+		bss['color'] = _range2color(level, 20, 80)
 
-	return render_template('scan.html', iface=iface, bss_list=result)
+	return render_template('scan.html', iface=iface, bss_list=scan_list)
 
 @app.route('/wpa_status', methods=['GET'])
 def show_wpa_status():
