@@ -68,7 +68,7 @@ def _net_addr(iface):
 	except (KeyError):
 		pass
 
-	return addrs
+	return inet_addrs
 
 @app.route('/api/net/addr', methods=['GET'])
 def api_net_addr():
