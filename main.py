@@ -233,7 +233,7 @@ def show_wpa_scan():
 
 	nwlist = wpa.list_networks()
 	nwdict = {}
-	for i in range(0, len(nwlist)-1):
+	for i in range(0, len(nwlist)):
 		nwdict[nwlist[i]['ssid']] = nwlist[i]
 
 	for i in range(0, len(result)):
