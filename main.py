@@ -151,6 +151,33 @@ def api_wpaconf_getconf():
 	conf = wpaconf.parse('/etc/wpa_supplicant/wpa_supplicant.conf')
 	return json.dumps(conf)
 
+def _wpa_scan_list(iface):
+	wpa = wpa_supplicant(iface)
+	scan_list = wpa.scan_results()
+
+	nwlist = wpa.list_networks()
+	nwdict = {}
+	for nw in nwlist:
+		nwdict[nw['ssid']] = nw
+
+	for bss in scan_list:
+		ssid = bss['ssid']
+		if ssid in nwdict and ( nwdict[ssid]['bssid'] == 'any' or nwdict[ssid]['bssid'] == bss['bssid'] ):
+			bss['nwid'] = nwdict[ssid]['id']
+
+		level = int(bss['level'])
+		# different drivers report different ranges - attempt to make it consistent
+		if level < 0:
+			level += 110
+		bss['color'] = _range2color(level, 20, 80)
+
+	return scan_list
+
+@app.route('/api/wpa/scan_list', methods=['GET'])
+def api_wpa_scan_list():
+	iface = request.args.get('iface')
+	return json.dumps(_wpa_scan_list(iface))
+
 def wpaconf_networks(conf):
 	names = []
 	try:
@@ -229,25 +256,7 @@ def _range2color(value, min, max):
 @app.route('/wpa_scan', methods=['GET'])
 def show_wpa_scan():
 	iface = request.args.get('iface')
-	wpa = wpa_supplicant(iface)
-	scan_list = wpa.scan_results()
-
-	nwlist = wpa.list_networks()
-	nwdict = {}
-	for nw in nwlist:
-		nwdict[nw['ssid']] = nw
-
-	for bss in scan_list:
-		ssid = bss['ssid']
-		if ssid in nwdict and ( nwdict[ssid]['bssid'] == 'any' or nwdict[ssid]['bssid'] == bss['bssid'] ):
-			bss['nwid'] = nwdict[ssid]['id']
-
-		level = int(bss['level'])
-		# different drivers report different ranges - attempt to make it consistent
-		if level < 0:
-			level += 110
-		bss['color'] = _range2color(level, 20, 80)
-
+	scan_list = _wpa_scan_list(iface)
 	return render_template('scan.html', iface=iface, bss_list=scan_list)
 
 @app.route('/wpa_status', methods=['GET'])
