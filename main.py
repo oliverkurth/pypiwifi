@@ -322,10 +322,13 @@ def show_netconfig():
 		essids[ni] = ''
 		if ni in config_ifaces:
 			if config_ifaces[ni].lower() == 'wpa':
-				wpa = wpa_supplicant(ni)
-				status = wpa.status()
-				if status['wpa_state'] == 'COMPLETED':
-					essids[ni] = status['ssid']
+				try:
+					wpa = wpa_supplicant(ni)
+					status = wpa.status()
+					if status['wpa_state'] == 'COMPLETED':
+						essids[ni] = status['ssid']
+				except:
+					pass
 			elif config_ifaces[ni].upper() == 'AP':
 				ha = hostapd(ni)
 				ha_config = ha.get_config()
