@@ -29,6 +29,7 @@ footer, header, hgroup, menu, nav, section {
     display: block;
 }
 body {
+    font-family: Tahoma, Verdana, Arial, sans-serif;
     line-height: 1;
 }
 ol, ul {
