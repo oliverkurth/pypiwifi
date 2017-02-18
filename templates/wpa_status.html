@@ -1,11 +1,6 @@
 <!doctype html>
 <html>
-<head>
-    <!--css-->
-    <link rel="stylesheet" href="static/styles.css">
-    <!--Mobile specific meta goodness :)-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-</head>
+{% include('head.html') %}
 <body onload="send_requests()">
 <script src="static/functions.js" type="text/javascript"></script>
 <script>
@@ -48,12 +43,8 @@ function send_requests() {
 </script>
 
 <title>{{name}}</title>
-
-<div id="status"></div>
-
-{% set thisitem = 'status' %}
-{% include 'wpa_menu.html' %}
-
+{% include ('menu.html') %}
+<div class="content" id="status"></div>
 </body>
 </html>
 

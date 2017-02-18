@@ -24,6 +24,13 @@ main_menu = [
 	{"name" : "firewall", "link" : "/firewall", "label" : "Firewall"}
 ]
 
+wpa_menu = [
+        {"name" : "main", "link" : "/", "label" : "Main"},
+        {"name" : "status", "link" : "/wpa_status", "label" : "Status"},
+        {"name" : "networks", "link" : "/wpaconf/networks", "label" : "Networks"},
+        {"name" : "scan", "link" : "/wpa_scan", "label" : "Scan"}
+]
+
 hostapd_menu = [
         {"name" : "main", "link" : "/", "label" : "Main"},
         {"name" : "ap", "link" : "/hostapd", "label" : "AP"},
@@ -281,12 +288,15 @@ def _range2color(value, min, max):
 def show_wpa_scan():
 	iface = request.args.get('iface')
 	scan_list = _wpa_scan_list(iface)
-	return render_template('scan.html', iface=iface, bss_list=scan_list)
+	return render_template('scan.html', iface=iface, bss_list=scan_list,
+		menu = menu_add_params(wpa_menu, {"iface" : iface}), active_name="scan")
 
 @app.route('/wpa_status', methods=['GET'])
 def show_wpa_status():
 	iface = request.args.get('iface')
-	return render_template('wpa_status.html', iface=iface)
+	return render_template('wpa_status.html',
+		iface=iface,
+		menu = menu_add_params(wpa_menu, {"iface" : iface}), active_name="status")
 
 @app.route('/wpa_select', methods=['GET'])
 def show_wpa_select():
@@ -294,7 +304,9 @@ def show_wpa_select():
 	nwid = request.args.get('id')
 	wpa = wpa_supplicant(iface)
 	wpa.select_network(nwid)
-	return render_template('wpa_status.html', iface=iface)
+	return render_template('wpa_status.html',
+		iface=iface,
+		menu = menu_add_params(wpa_menu, {"iface" : iface}), active_name="status")
 
 @app.route('/hostapd', methods=['GET'])
 def show_hostapd():
@@ -309,14 +321,16 @@ def show_wpaconf_networks():
 	iface = request.args.get('iface')
 	conf = wpaconf.parse('/etc/wpa_supplicant/wpa_supplicant.conf')
 	names = wpaconf_networks(conf)
-	return render_template('networks.html', networks=names, iface=iface)
+	return render_template('networks.html', networks=names, iface=iface,
+		menu = menu_add_params(wpa_menu, {"iface" : iface}), active_name="networks")
 
 @app.route('/wpaconf/edit_network')
 def show_wpa_edit_network():
 	iface = request.args.get('iface')
 	ssid = request.args.get('ssid', '')
 	password = request.args.get('password', '')
-	return render_template('wpa_network.html', ssid=ssid, password=password, iface=iface)
+	return render_template('wpa_network.html', ssid=ssid, password=password, iface=iface,
+		menu = menu_add_params(wpa_menu, {"iface" : iface}), active_name="networks")
 
 @app.route('/hostapd_stations', methods=['GET'])
 def show_hostapd_stations():
