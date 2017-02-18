@@ -61,7 +61,7 @@ def get_public_ip():
 	client = httplib2.Http()
 	response, content = client.request(config['public_ip_url'])
 
-	return content
+	return content.strip()
 
 def get_dns():
 	dnslist = []
