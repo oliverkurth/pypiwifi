@@ -7,6 +7,7 @@ import sys
 import os
 import httplib2
 import socket
+import copy
 
 import ping
 from wpa import wpa_supplicant
@@ -22,6 +23,23 @@ main_menu = [
         {"name" : "control", "link" : "/control", "label" : "Control"},
 	{"name" : "firewall", "link" : "/firewall", "label" : "Firewall"}
 ]
+
+hostapd_menu = [
+        {"name" : "main", "link" : "/", "label" : "Main"},
+        {"name" : "ap", "link" : "/hostapd", "label" : "AP"},
+        {"name" : "stations", "link" : "/hostapd_stations", "label" : "Connected Stations"}
+]
+
+def menu_add_params(orig_menu, params):
+	# copy orig_menu to menu
+	menu = copy.deepcopy(orig_menu)
+	for item in menu:
+		for i, k in enumerate(params.keys()):
+			if i == 0:
+				item["link"] += '?' + k + '=' + params[k]
+			else:
+				item["link"] += '&' + k + '=' + params[k]
+	return menu
 
 def read_config():
 	global config
@@ -282,7 +300,9 @@ def show_wpa_select():
 def show_hostapd():
 	iface = request.args.get('iface')
 	ha = hostapd(iface)
-	return render_template('hostapd.html', iface=iface, ha=ha.get_config())
+	return render_template('hostapd.html',
+		iface=iface, ha=ha.get_config(),
+		menu = menu_add_params(hostapd_menu, {"iface" : iface}), active_name="ap")
 
 @app.route('/wpaconf/networks')
 def show_wpaconf_networks():
@@ -302,7 +322,9 @@ def show_wpa_edit_network():
 def show_hostapd_stations():
 	iface = request.args.get('iface')
 	ha = hostapd(iface)
-	return render_template('ha_stations.html', iface=iface, stations = ha.all_sta())
+	return render_template('ha_stations.html',
+		iface=iface, stations = ha.all_sta(),
+		menu = menu_add_params(hostapd_menu, {"iface" : iface}), active_name="stations")
 
 @app.route('/control')
 def show_control():
