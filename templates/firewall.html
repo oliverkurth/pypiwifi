@@ -35,7 +35,8 @@ function set_firewall() {
 </script>
 
 <title>Firewall Settings</title>
-
+{% include('menu.html') %}
+<div class="content">
 <table class="main">
 {% for fw in firewalls %}
   <tr>
@@ -49,12 +50,6 @@ function set_firewall() {
     <td><button type="button" onclick="set_firewall()">Set</button></td>
   </tr>
 </table>
-
-<nav id="primary_nav">
-
-    <ul>
-        <li><a href="/">Main</a></li>
-    </ul>
-
-</nav><!--end primary_nav-->
+</div>
+</body>
 

@@ -17,6 +17,12 @@ import wpaconf
 app = Flask(__name__)
 config = {}
 
+main_menu = [
+        {"name" : "main", "link" : "/", "label" : "Main"},
+        {"name" : "control", "link" : "/control", "label" : "Control"},
+	{"name" : "firewall", "link" : "/firewall", "label" : "Firewall"}
+]
+
 def read_config():
 	global config
 	config_file = '/etc/pypiwifi/config.json'
@@ -301,13 +307,17 @@ def show_hostapd_stations():
 @app.route('/control')
 def show_control():
 	control = Control(config['control'])
-	return render_template('control.html', services = control.list_services_names())
+	return render_template('control.html',
+		services = control.list_services_names(),
+		menu=main_menu, active_name="control")
 
 @app.route('/firewall')
 def show_firewall():
 	control = Control(config['control'])
 	firewalls = config['firewalls']
-	return render_template('firewall.html', firewalls=firewalls, current_fw=control.get_current_fw())
+	return render_template('firewall.html',
+		firewalls=firewalls, current_fw=control.get_current_fw(),
+		menu=main_menu, active_name="firewall")
 
 @app.route('/')
 def show_netconfig():
@@ -347,7 +357,8 @@ def show_netconfig():
 
 	return render_template('netconfig.html',
 		ifaces=ifaces, addrs=addrs, gateway=gateway,
-		essids=essids, dns=dnslist[0], config_ifaces=config_ifaces)
+		essids=essids, dns=dnslist[0], config_ifaces=config_ifaces,
+		menu=main_menu, active_name="main")
 
 _js_escapes = {
         '\\': '\\u005C',

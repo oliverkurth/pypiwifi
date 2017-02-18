@@ -1,10 +1,9 @@
 <!doctype html>
 <html>
 <head>
-    <!--css-->
-    <link rel="stylesheet" href="static/styles.css">
-    <!--Mobile specific meta goodness :)-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+<meta charset="utf-8">
 </head>
 <body onload="send_requests()">
 
@@ -50,9 +49,9 @@ function send_requests() {
 
 </script>
 
-
 <title>{{name}}</title>
-
+{% include 'menu.html' %}
+<div class=content>
 <table class="main">
 
 <tr>
@@ -101,16 +100,7 @@ function send_requests() {
 <tr><td>Public IP:</td><td><div id="public_ip"></div></td></tr>
 <tr><td>Your IP:</td><td><div id="client_ip"></div></td></tr>
 </table>
-
-<nav id="primary_nav">
-
-    <ul>
-        <li><a href="">Reload</a></li>
-        <li><a href="/control">Control</a></li>
-        <li><a href="/firewall">Firewall</a></li>
-    </ul>
-
-</nav><!--end primary_nav-->
+</div>
 
 
 </body>

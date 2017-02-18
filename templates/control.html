@@ -37,7 +37,8 @@ function send_requests() {
 </script>
 
 <title>{{name}}</title>
-
+{% include('menu.html') %}
+<div class="content">
 <table class="main">
 {% for service in services %}
   <tr>
@@ -57,11 +58,6 @@ function send_requests() {
   </tr>
 </table>
 
-<nav id="primary_nav">
-
-    <ul>
-        <li><a href="/">Main</a></li>
-    </ul>
-
-</nav><!--end primary_nav-->
+</div>
+</body>
 
