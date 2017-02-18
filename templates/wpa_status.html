@@ -39,6 +39,8 @@ function status_table(result, data) {
            "    <tr><td>State:</td><td>" + result.wpa_state + "</td></tr>" +
            "  </table>";
     }
+
+    setTimeout(send_requests, 1000);
 }
 
 function send_requests() {
