@@ -1,57 +1,67 @@
-/* http://meyerweb.com/eric/tools/css/reset/ 
-   v2.0b1 | 201101 
-   NOTE: WORK IN PROGRESS
-   USE WITH CAUTION AND TEST WITH ABANDON */
- 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section, summary,
-time, mark, audio, video {
+body,html {
     margin: 0;
-    padding: 0;
     border: 0;
     outline: 0;
     font-size: 100%;
     font: inherit;
     vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-    display: block;
-}
-body {
+    padding: 0;
     font-family: Tahoma, Verdana, Arial, sans-serif;
-    line-height: 1;
 }
-ol, ul {
-    list-style: none;
+
+ul.sidenav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 25%;
+    background-color: #f1f1f1;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
 }
-blockquote, q {
-    quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-    content: '';
-    content: none;
-}
- 
-/* remember to highlight inserts somehow! */
-ins {
+
+ul.sidenav li a {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
     text-decoration: none;
 }
-del {
-    text-decoration: line-through;
-}
  
+ul.sidenav li a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+ul.sidenav li a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
+
+div.content {
+    margin-left: 25%;
+    height: 1000px;
+}
+
+@media screen and (max-width: 1050px){
+    ul.sidenav {
+        width:100%;
+        height:auto;
+        position:relative;
+    }
+    ul.sidenav li a {
+        float: left;
+        padding: 15px;
+    }
+    div.content {margin-left:0;}
+}
+
+@media screen and (max-width: 400px){
+    ul.sidenav li a {
+        text-align: center;
+        float: none;
+    }
+}
+
 table {
     border-collapse: collapse;
     border-spacing: 0;
@@ -60,11 +70,11 @@ table {
 table.main,table.scan{
     width: 100%;
 }
-
-td{
+ 
+td {
     padding: 5px;
 }
-
+ 
 table.main tr:nth-child(even) {
     background-color: #dddddd;
 }
@@ -73,42 +83,4 @@ button {
    font-size:125%
 }
 
-/*navigation*/ 
- 
-#primary_nav ul {
-    list-style: none;
-    background: #1c1c1c;
-    padding: 5px 0;
-}
- 
-#primary_nav li a {
-    display: block;
-    padding: 0 20px;
-    color: #fff;
-    text-decoration: none;
-    letter-spacing: 0.1em;
-    letter-spacing: 0.1em;
-    line-height: 2em;
-    height: 2em;
-    border-bottom: 1px solid #383838;
-}
- 
-#primary_nav li:last-child a {
-    border-bottom: none;
-}
- 
-#primary_nav li a:hover,
-#primary_nav li a:focus {
-    color: #1c1c1c;
-    background: #ccc;
-}
- 
-/*footer*/
- 
-footer {
-    font-family: 'PT Serif', serif;
-    font-style: italic;
-    text-align: center;
-    font-size: 14px;
-}
 

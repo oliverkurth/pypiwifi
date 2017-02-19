@@ -1,16 +1,12 @@
 <!doctype html>
 <html>
-<head>
-    <!--css-->
-    <link rel="stylesheet" href="static/styles.css">
-    <!--Mobile specific meta goodness :)-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-</head>
+{% include('head.html') %}
 <body>
 <title>{{name}}</title>
 
+{% include('menu.html') %}
+<div class="content">
 <table class="main">
-
 <tr>
 <td>SSID:</td><td>{{ha['ssid']}}</td>
 </tr>
@@ -21,16 +17,7 @@
 <td>Key Mgmt:</td><td>{{ha['key_mgmt']}}</td>
 </tr>
 </table>
-
-<nav id="primary_nav">
-
-    <ul>
-        <li><a href="/">Main</a></li>
-        <li><a href="hostapd_stations?iface={{iface}}">Connected Stations</a></li>
-        <li><a href="">Reload</a></li>
-    </ul>
-
-</nav><!--end primary_nav-->
+</div>
 
 </body>
 </html>

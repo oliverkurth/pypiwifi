@@ -1,0 +1,10 @@
+<ul class="sidenav">
+{% for item in menu %}
+  {% if item['name'] == active_name %}
+      <li><a class="active" href="{{item['link']}}">{{item['label']}}</a></li>
+  {% else %}
+      <li><a href="{{item['link']}}">{{item['label']}}</a></li>
+  {% endif %} 
+{% endfor %}
+</ul>
+

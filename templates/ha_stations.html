@@ -1,11 +1,6 @@
 <!doctype html>
 <html>
-<head>
-    <!--css-->
-    <link rel="stylesheet" href="static/styles.css">
-    <!--Mobile specific meta goodness :)-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-</head>
+{% include('head.html') %}
 <body>
 
 <script src="static/functions.js" type="text/javascript"></script>
@@ -52,9 +47,9 @@ function expand_collapse_cell(id) {
 </script>
 
 <title>Scan Results</title>
-
+{% include('menu.html') %}
+<div class="content">
 <table class="main">
-
 {% for id, sta in stations.iteritems() %}
 <tr id="{{id}}" onclick="expand_collapse_cell('{{id}}')">
 <td>{{id}}</td>
@@ -64,16 +59,7 @@ function expand_collapse_cell(id) {
 {% endfor %}
 
 </table>
-<nav id="primary_nav">
-
-    <ul>
-        <li><a href="/">Main</a></li>
-        <li><a href="/hostapd?iface={{iface}}">AP</a></li>
-        <li><a href="">Reload</a></li>
-    </ul>
-
-</nav><!--end primary_nav-->
-
+</div>
 </body>
 </html>
 
