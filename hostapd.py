@@ -19,11 +19,14 @@ class hostapd:
 		return subprocess.check_output(co_args)
 
 	def get_config(self):
-		lines = self.hostapd_cli('get_config').splitlines()
 		config = {}
-		for l in lines:
-			key, val = l.split('=')
-			config[key] = val
+		try:
+			lines = self.hostapd_cli('get_config').splitlines()
+			for l in lines:
+				key, val = l.split('=')
+				config[key] = val
+		except subprocess.CalledProcessError:
+			pass
 		return config
 
 	# TODO: move to its own module
@@ -58,7 +61,10 @@ class hostapd:
 		return station
 
 	def all_sta(self, get_leases=True):
-		lines = self.hostapd_cli('all_sta').splitlines()
+		try:
+			lines = self.hostapd_cli('all_sta').splitlines()
+		except subprocess.CalledProcessError:
+			return {}
 
 		stations = {}
 		sta_id = None
@@ -70,7 +76,7 @@ class hostapd:
 				key, val = l.split('=')
 				stations[sta_id][key] = val
 			else:
-				return None
+				return {}
 
 		if get_leases:
 			clients = self.dnsmasq_leases()

@@ -387,7 +387,10 @@ def show_netconfig():
 			elif config_ifaces[ni].upper() == 'AP':
 				ha = hostapd(ni)
 				ha_config = ha.get_config()
-				essids[ni] = ha_config['ssid']
+				try:
+					essids[ni] = ha_config['ssid']
+				except KeyError:
+					pass
 
 	dnslist = get_dns()
 
