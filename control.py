@@ -29,7 +29,7 @@ class Control:
 		return self.config['services'].keys()
 
 	def _systemctl_output(self, command, service):
-		if command in ['is-failed', 'is-enabled']:
+		if command in ['status', 'is-failed', 'is-enabled']:
 			if not service in self.config['services'].values():
 				if service in self.config['services'].keys():
 					service = self.config['services'][service]
@@ -41,6 +41,9 @@ class Control:
 			p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 			output, error = p.communicate()
 			return output.rstrip()
+
+	def service_log(self, service):
+		return self._systemctl_output('status', service)
 
 	def service_status(self, service):
 		return self._systemctl_output('is-failed', service)

@@ -22,6 +22,7 @@ function display_service_status(result, id)
 function send_requests() {
 	async_request('/api/control/service_status?service={{service}}', display_service_status, '{{service}}_status');
 	async_request('/api/control/service_enabled?service={{service}}', display_service_status, '{{service}}_enabled');
+	async_request('/api/control/service_log?service={{service}}', display_service_status, '{{service}}_log');
 }
 
 </script>
@@ -41,6 +42,11 @@ function send_requests() {
     <td id="{{service}}_enabled"></td>
     <td><button type=button onclick="service('{{service}}', 'enable')">Enable</button></td>
     <td><button type=button onclick="service('{{service}}', 'disable')">Disable</button></td>
+  </tr>
+</table>
+<table class="main">
+  <tr>
+    <td colspan=4><pre id="{{service}}_log"></pre></td>
   </tr>
 </table>
 
