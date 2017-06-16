@@ -267,6 +267,12 @@ def api_control_service_status():
 	control = Control(config['control'])
 	return json.dumps(control.service_status(service))
 
+@app.route('/api/control/service_enabled', methods=['GET'])
+def api_control_service_enabled():
+	service = request.args.get('service')
+	control = Control(config['control'])
+	return json.dumps(control.service_enabled(service))
+
 @app.route('/api/fw/select', methods=['GET'])
 def api_fw_select():
 	name = request.args.get('name')

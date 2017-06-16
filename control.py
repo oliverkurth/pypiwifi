@@ -28,21 +28,28 @@ class Control:
 	def list_services_names(self):
 		return self.config['services'].keys()
 
+	def _systemctl_output(self, command, service):
+		if command in ['is-failed', 'is-enabled']:
+			if not service in self.config['services'].values():
+				if service in self.config['services'].keys():
+					service = self.config['services'][service]
+				else:
+					return 'unknown service ' + service
+			args = ['systemctl', command, service ]
+			if self.sudo_method == 'sudo':
+				args = ['sudo'] + args
+			p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+			output, error = p.communicate()
+			return output.rstrip()
+
 	def service_status(self, service):
-		if not service in self.config['services'].values():
-			if service in self.config['services'].keys():
-				service = self.config['services'][service]
-			else:
-				return 'unknown service ' + service
-		args = ['systemctl', 'is-failed', service ]
-		if self.sudo_method == 'sudo':
-			args = ['sudo'] + args
-		p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		output, error = p.communicate()
-		return output.rstrip()
+		return self._systemctl_output('is-failed', service)
+
+	def service_enabled(self, service):
+		return self._systemctl_output('is-enabled', service)
 
 	def service(self, service, action):
-		if action in ['start', 'stop', 'restart']:
+		if action in ['start', 'stop', 'restart', 'enable', 'disable']:
 			if service in self.list_services():
 				return self.do_call(['systemctl', action, service])
 			elif service in self.list_services_names():
