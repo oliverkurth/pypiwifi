@@ -353,6 +353,14 @@ def show_control():
 		services = control.list_services_names(),
 		menu=main_menu, active_name="control")
 
+@app.route('/control_service')
+def show_control_service():
+	service = request.args.get('service')
+	control = Control(config['control'])
+	return render_template('control_service.html',
+		service = service,
+		menu=main_menu, active_name="control")
+
 @app.route('/firewall')
 def show_firewall():
 	control = Control(config['control'])

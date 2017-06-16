@@ -9,10 +9,6 @@ function redirect_main() {
 	window.location = '/';
 }
 
-function power(action) {
-	async_request('/api/control/power?action=' + action, redirect_main, null)
-}
-
 function service(service, action) {
 	async_request('/api/control/service?action=' + action + '&service=' + service,
 	              send_requests, null)
@@ -24,9 +20,8 @@ function display_service_status(result, id)
 }
 
 function send_requests() {
-{% for service in services %}
 	async_request('/api/control/service_status?service={{service}}', display_service_status, '{{service}}_status');
-{% endfor %}
+	async_request('/api/control/service_enabled?service={{service}}', display_service_status, '{{service}}_enabled');
 }
 
 </script>
@@ -35,20 +30,17 @@ function send_requests() {
 {% include('menu.html') %}
 <div class="content">
 <table class="main">
-{% for service in services %}
   <tr>
-    <td><a href="control_service?service={{service}}">{{service}}</a></td>
+    <td>{{service}}</td>
+  </tr> <tr>
     <td id="{{service}}_status"></td>
     <td><button type=button onclick="service('{{service}}', 'start')">Start</button></td>
     <td><button type=button onclick="service('{{service}}', 'stop')">Stop</button></td>
-  </tr>
-{% endfor %}
-</table>
-
-<table class="main">
-  <tr>
-    <td><button type="button" onclick="power('reboot')">Reboot</button></td>
-    <td><button type="button" onclick="power('halt')">Halt</button></td>
+    <td><button type=button onclick="service('{{service}}', 'restart')">Restart</button></td>
+  </tr> <tr>
+    <td id="{{service}}_enabled"></td>
+    <td><button type=button onclick="service('{{service}}', 'enable')">Enable</button></td>
+    <td><button type=button onclick="service('{{service}}', 'disable')">Disable</button></td>
   </tr>
 </table>
 
