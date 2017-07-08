@@ -344,6 +344,23 @@ def show_wpaconf_networks():
 	return render_template('networks.html', networks=names, iface=iface,
 		menu = menu_add_params(wpa_menu, {"iface" : iface}), active_name="networks")
 
+@app.route('/wpaconf/remove_network')
+def show_wpa_remove_network():
+	iface = request.args.get('iface')
+	ssid = request.args.get('ssid', '')
+
+	conf = wpaconf.parse('/etc/wpa_supplicant/wpa_supplicant.conf')
+	wpaconf.remove_network(conf, ssid)
+	wpaconf.unparse(conf, '/etc/wpa_supplicant/wpa_supplicant.conf')
+
+	if iface != None:
+		wpa = wpa_supplicant(iface)
+		wpa.wpa_cli('reconfigure')
+
+	names = wpaconf_networks(conf)
+	return render_template('networks.html', networks=names, iface=iface,
+		menu = menu_add_params(wpa_menu, {"iface" : iface}), active_name="networks")
+
 @app.route('/wpaconf/edit_network')
 def show_wpa_edit_network():
 	iface = request.args.get('iface')

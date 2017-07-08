@@ -46,11 +46,14 @@ def unparse(conf, file, level = 0, backup = True):
 	with open(file, "w+") as f:
 		unparsef(conf, f, level)
 
-
-def setnetwork(conf, name, password):
+def remove_network(conf, name):
 	for n in conf['network']:
 		if n['ssid'].strip('"') == name:
 			conf['network'].remove(n)
+
+def setnetwork(conf, name, password):
+	remove_network(conf, name)
+
 	if password != None:
 		network = {
 			"group":"CCMP TKIP WEP104 WEP40",
@@ -68,7 +71,6 @@ def setnetwork(conf, name, password):
 		}
 	print type(name)
 	conf['network'].append(network)
-
 
 if __name__ == '__main__':
 	conf = parse("/etc/wpa_supplicant/wpa_supplicant.conf")
