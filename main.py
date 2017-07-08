@@ -225,11 +225,19 @@ def api_wpaconf_networks():
 
 @app.route('/api/wpaconf/setnetwork', methods=['GET'])
 def api_wpaconf_setnetwork():
+	iface = request.args.get('iface')
+
 	name = request.args.get('name')
 	passwd = request.args.get('password')
+
 	conf = wpaconf.parse('/etc/wpa_supplicant/wpa_supplicant.conf')
 	wpaconf.setnetwork(conf, name, passwd)
 	wpaconf.unparse(conf, '/etc/wpa_supplicant/wpa_supplicant.conf')
+
+	if iface != None:
+		wpa = wpa_supplicant(iface)
+		wpa.wpa_cli('reconfigure')
+
 	return json.dumps('OK')
 
 @app.route('/api/hostapd/sta', methods=['GET'])

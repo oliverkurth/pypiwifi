@@ -17,9 +17,9 @@ function save_network() {
     ssid = document.getElementById("ssid").value;
     password = document.getElementById("password").value;
     if (password == '') {
-        async_request('/api/wpaconf/setnetwork?name=' + ssid, saved_cb, null);
+        async_request('/api/wpaconf/setnetwork?iface={{iface}}&name=' + ssid, saved_cb, null);
     } else {
-        async_request('/api/wpaconf/setnetwork?name=' + ssid + '&password=' + password, saved_cb, null);
+        async_request('/api/wpaconf/setnetwork?iface={{iface}}&name=' + ssid + '&password=' + password, saved_cb, null);
     }
 }
 
