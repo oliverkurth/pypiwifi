@@ -14,6 +14,7 @@ HOSTAPD_FILE="/etc/hostapd/hostapd-ap0.conf"
 
 def mktemp():
     fout, name = tempfile.mkstemp()
+    os.fchmod(fout, 0644)
     fout = os.fdopen(fout, "w")
     return fout, name
 
