@@ -74,7 +74,12 @@ def write_hostapd(config):
     os.rename(name, HOSTAPD_FILE)
 
 if __name__ == '__main__':
-    with open("customize.json") as f:
+    if len(sys.argv) < 2:
+        sys.stderr.write("need to specify customization file\n")
+        exit(1)
+
+    config_file = sys.argv[1]
+    with open(config_file) as f:
         config = json.load(f)
     write_hosts(config)
     write_hostname(config)
