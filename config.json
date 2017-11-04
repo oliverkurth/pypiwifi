@@ -4,8 +4,11 @@
 	},
 	"interfaces": {
 		"wlan0" : "wpa",
+		"wlan1" : "wpa",
+		"wlan2" : "wpa",
 		"eth0" : "None",
 		"ap0" : "AP",
+		"ap1" : "AP",
 		"alpha0" : "AP",
 		"edi0" : "AP",
 		"lo" : "ignore"
@@ -17,10 +20,12 @@
 		"halt": "/sbin/halt",
 		"reboot": "/sbin/reboot",
 		"services": {
-			"AP": "hostapd-alpha.service",
-			"WPA": "wpa_supplicant.service",
-			"NTP": "ntp.service",
-			"GSM": "wvdial.service"
+			"AP0": "hostapd@ap0.service",
+			"AP1": "hostapd@ap1.service",
+			"WPA wlan0": "wpa_supplicant@wlan0.service",
+			"WPA wlan1": "wpa_supplicant@wlan1.service",
+			"DNS/DHCP": "dnsmasq.service",
+			"NTP": "ntp.service"
 		}
 	},
 	"firewalls":[
