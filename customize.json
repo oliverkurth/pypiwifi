@@ -1,7 +1,7 @@
 {
-	"hostname" : "okupi0x",
-	"ssid" : "okupi0x",
-	"passphrase" : "nosmurf1",
-	"ip" : "192.168.12.254"
+	"hostname" : "pi",
+	"ssid" : "pi",
+	"passphrase" : "pypi",
+	"ip" : "192.168.14.254"
 }
 
